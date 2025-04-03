@@ -1,6 +1,8 @@
 ﻿using System.Text;
 using Common.Settings;
 using DataAccess;
+using DataAccess.Implementations;
+using DataAccess.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,7 +27,12 @@ namespace Services.Helpers
         }
         public static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
-
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IImageRepository, ImageRepository>();
+            services.AddTransient<IIngredientRepository, IngredientRepository>();
+            services.AddTransient<IRecipeRepository, RecipeRepository>();
+            services.AddTransient<ITagRepository, TagRepository>();
             return services;
         }
 
