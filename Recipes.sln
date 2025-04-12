@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96 d17.13
+VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes", "Recipes\Recipes.csproj", "{B40C538B-5758-4249-A26F-1AB2E8EA2745}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{3EDA0083-123B-46DD-9573-A16A55FC78A5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mappers", "Mappers\Mappers.csproj", "{184BAA5B-FDD8-41A1-8A7A-175141A431A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTOs", "DTOs\DTOs.csproj", "{3B8AAB23-9122-4FAD-A483-6B73E37864BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{184BAA5B-FDD8-41A1-8A7A-175141A431A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{184BAA5B-FDD8-41A1-8A7A-175141A431A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{184BAA5B-FDD8-41A1-8A7A-175141A431A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B8AAB23-9122-4FAD-A483-6B73E37864BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B8AAB23-9122-4FAD-A483-6B73E37864BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B8AAB23-9122-4FAD-A483-6B73E37864BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B8AAB23-9122-4FAD-A483-6B73E37864BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

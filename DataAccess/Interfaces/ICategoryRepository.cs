@@ -4,6 +4,6 @@ namespace DataAccess.Interfaces
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        Task<IEnumerable<Category>> GetCategoriesWithRecipes();
+        Task<IEnumerable<Category>> GetCategoriesWithRecipesAsync();
     }
 }
