@@ -12,7 +12,7 @@ namespace DataAccess.Implementations
             _context = context;
         }
 
-        public async Task<IEnumerable<Category>> GetCategoriesWithRecipes()
+        public async Task<IEnumerable<Category>> GetCategoriesWithRecipesAsync()
         {
             return await _context.Categories
                 .Where(c => c.Recipes.Any()) //for categories with at least one recipe
