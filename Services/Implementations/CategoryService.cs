@@ -31,7 +31,6 @@ namespace Services.Implementations
                 {
                     _logger.LogError("No categories found.");
                     return new CustomResponse<List<CategoryDto>>($"No categories found.");
-                    //return new CustomResponse<OrderDto>($"Pizza not found.");
                 }
                 var categoriesDto = _mapper.Map<CustomResponse<List<CategoryDto>>>(categories);
                 return categoriesDto;

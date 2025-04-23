@@ -1,13 +1,16 @@
-﻿using DTOs.UserDto;
+﻿using Common.Responses;
+using DTOs.UserDto;
 
 namespace Services.Interfaces
 {
     public interface IUserService
     {
-        Task<UserDto> GetUserByIdAsync(int id);
-        Task<IEnumerable<UserDto>> GetAllUsersAsync();
-        Task<UserDto> CreateUserAsync(UserDto user);
-        Task<UserDto> UpdateUserAsync(UserDto user);
-        Task<bool> DeleteUserAsync(int id);
+        Task<CustomResponse<RegisterUserResponseDto>> RegisterUserAsync(RegisterUserDto registerUser);
+        Task<CustomResponse<LoginUserResponseDto>> LoginUserAsync(LoginUserDto loginUser);
+        Task<CustomResponse<List<UserDto>>> GetUserByIdAsync(int id);
+        Task<CustomResponse> GetAllUsersAsync();
+        //Task<CustomResponse<AddUserDto>> CreateUserAsync(UserDto user);
+        Task<CustomResponse<UpdateUserDto>> UpdateUserAsync(UpdateUserDto updateUser, string username);
+        Task<CustomResponse> DeleteUserAsync(int id);
     }
 }

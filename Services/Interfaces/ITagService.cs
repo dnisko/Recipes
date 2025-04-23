@@ -1,10 +1,11 @@
-﻿using DTOs.TagDto;
+﻿using Common.Responses;
+using DTOs.TagDto;
 
 namespace Services.Interfaces
 {
     public interface ITagService
     {
-        Task<List<TagDto>> GetPopularTagsAsync();
-        Task<TagDto> GetTagsByARecipeAsync(int id);
+        Task<CustomResponse<List<TagDto>>> GetPopularTagsAsync();
+        Task<CustomResponse<List<TagDto>>> GetTagsByARecipeAsync(int id);
     }
 }

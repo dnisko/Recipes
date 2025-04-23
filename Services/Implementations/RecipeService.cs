@@ -85,6 +85,11 @@ namespace Services.Implementations
             try
             {
                 var recipes = await _recipeRepository.SearchRecipes(keyword);
+                if (recipes == null || !recipes.Any())
+                {
+                    _logger.LogError($"No recipes found with keyword {keyword}.");
+                    return new CustomResponse<List<RecipeDto>>($"No recipes found with keyword {keyword}.");
+                }
                 var recipesDto = _mapper.Map<List<RecipeDto>>(recipes);
                 return new CustomResponse<List<RecipeDto>>(recipesDto);
             }
