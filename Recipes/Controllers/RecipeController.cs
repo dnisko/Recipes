@@ -1,0 +1,182 @@
+﻿using Common.Exceptions.RecipeException;
+using Common.Exceptions.ServerException;
+using DTOs.RecipeDto;
+using Microsoft.AspNetCore.Mvc;
+using Services.Interfaces;
+
+namespace Recipes.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class RecipeController : BaseController
+    {
+        private readonly IRecipeService _recipeService;
+
+        public RecipeController(IRecipeService recipeService)
+        {
+            _recipeService = recipeService;
+        }
+
+        [HttpGet("getAll")]
+        public async Task<IActionResult> GetAllRecipes()
+        {
+            try
+            {
+                var response = await _recipeService.GetAllRecipesAsync();
+                return Response(response);
+            }
+            catch (RecipeDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("getById/{id}")]
+        public async Task<IActionResult> GetRecipeById(int id)
+        {
+            try
+            {
+                var response = await _recipeService.GetRecipeByIdAsync(id);
+                return Response(response);
+            }
+            catch (RecipeDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("getByCategory/{categoryId}")]
+        public async Task<IActionResult> GetRecipesByCategory(int categoryId)
+        {
+            try
+            {
+                var response = await _recipeService.GetRecipesByCategoryAsync(categoryId);
+                return Response(response);
+            }
+            catch (RecipeDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchRecipes(string keyword)
+        {
+            try
+            {
+                var response = await _recipeService.SearchRecipesAsync(keyword);
+                return Response(response);
+            }
+            catch (RecipeDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("getWithTags")]
+        public async Task<IActionResult> GetRecipesWithTags()
+        {
+            try
+            {
+                var response = await _recipeService.GetRecipesWithTagsAsync();
+                return Response(response);
+            }
+            catch (RecipeDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("getDetails/{recipeId}")]
+        public async Task<IActionResult> GetRecipeDetails(int recipeId)
+        {
+            try
+            {
+                var response = await _recipeService.GetRecipeDetailsAsync(recipeId);
+                return Response(response);
+            }
+            catch (RecipeDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("add")]
+        public async Task<IActionResult> AddRecipe([FromBody] RecipeDto recipe)
+        {
+            try
+            {
+                var response = await _recipeService.AddRecipeAsync(recipe);
+                return Response(response);
+            }
+            catch (RecipeDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateRecipe([FromBody] RecipeDto recipe)
+        {
+            try
+            {
+                var response = await _recipeService.UpdateRecipeAsync(recipe);
+                return Response(response);
+            }
+            catch (RecipeDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteRecipe(int id)
+        {
+            try
+            {
+                var response = await _recipeService.DeleteRecipeAsync(id);
+                return Response(response);
+            }
+            catch (RecipeDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+    }
+}

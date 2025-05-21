@@ -46,6 +46,12 @@ namespace Services.Helpers
         {
             services.AddSwaggerGen(c =>
             {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Recipes API",
+                    Version = "v1",
+                    Description = "API for managing recipes and related data",
+                });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer {token}')",
@@ -69,8 +75,6 @@ namespace Services.Helpers
                         Array.Empty<string>()
                     }
                 });
-
-                c.EnableAnnotations();
             });
 
             return services;
