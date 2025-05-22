@@ -52,6 +52,10 @@ namespace Services.Helpers
                     Version = "v1",
                     Description = "API for managing recipes and related data",
                 });
+                //c.OpenApiGeneratorOptions = new Swashbuckle.AspNetCore.SwaggerGen.OpenApiGeneratorOptions
+                //{
+                //    OpenApiVersion = "3.0.1"
+                //};
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer {token}')",
