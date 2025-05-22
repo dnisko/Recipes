@@ -18,10 +18,14 @@ namespace DomainModels
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
 
-        [Required]
-        public ICollection<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
-        //public ICollection<Image> Images { get; set; } = new List<Image>();
-        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
+        //[Required]
+        //public ICollection<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
+        ////public ICollection<Image> Images { get; set; } = new List<Image>();
+        //public ICollection<Tag> Tags { get; set; } = new List<Tag>();
+        private readonly List<Ingredient> _ingredients = new();
+        private readonly List<Tag> _tags = new();
 
+        public IReadOnlyCollection<Ingredient> Ingredients => _ingredients.AsReadOnly();
+        public IReadOnlyCollection<Tag> Tags => _tags.AsReadOnly();
     }
 }

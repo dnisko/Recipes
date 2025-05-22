@@ -6,7 +6,8 @@ namespace DomainModels
     {
         [Required]
         public string? Name { get; set; }
-        public double Quantity { get; set; }
+        [Range(0.01, 1000)]
+        public float Quantity { get; set; }
         [MaxLength(10)]
         public string? Unit { get; set; }
 

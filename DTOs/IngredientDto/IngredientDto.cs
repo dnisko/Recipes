@@ -5,8 +5,12 @@ namespace DTOs.IngredientDto
     public class IngredientDto
     {
         [Required]
+        [MaxLength(50)]
         public string? Name { get; set; }
-        public double Quantity { get; set; }
+        [Range(0.01, 1000)]
+        public float Quantity { get; set; }
+        [Required]
+        [MaxLength(20)]
         public string? Unit { get; set; }
         //public int RecipeId { get; set; }
     }
