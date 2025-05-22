@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Services.Implementations;
+using Services.Interfaces;
 
 namespace Services.Helpers
 {
@@ -39,6 +41,10 @@ namespace Services.Helpers
 
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
+            services.AddScoped<IRecipeService, RecipeService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ITokenService, TokenService>();
+            //services.AddScoped<IUserService, UserService>();
 
             return services;
         }
