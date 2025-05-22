@@ -30,14 +30,19 @@ namespace Mappers
             CreateMap<Ingredient, IngredientDto>().ReverseMap();
 
             CreateMap<Recipe, AddRecipeDto>()
-                .ForMember(dest => dest.Difficulty,
-                    opt => 
-                        opt.MapFrom
-                            ((src => 
-                                (DifficultyLevel)src.Difficulty)))
-                .ReverseMap();
+                //.ForMember(dest => dest.Difficulty,
+                //    opt => 
+                //        opt.MapFrom
+                //            ((src => 
+                //                (DifficultyLevel)src.Difficulty)))
+                .ReverseMap()
+                .ForMember(dest => dest._ingredients, opt => opt.MapFrom(src => src.Ingredients))
+                .ForMember(dest => dest._tags, opt => opt.MapFrom(src => src.Tags));
             CreateMap<Recipe, UpdateRecipeDto>().ReverseMap();
-            CreateMap<Recipe, RecipeDto>().ReverseMap();
+            CreateMap<Recipe, RecipeDto>()
+                .ReverseMap()
+                .ForMember(dest => dest._ingredients, opt => opt.MapFrom(src => src.Ingredients))
+                .ForMember(dest => dest._tags, opt => opt.MapFrom(src => src.Tags));
 
             CreateMap<Tag, AddTagDto>().ReverseMap();
             CreateMap<Tag, UpdateTagDto>().ReverseMap();

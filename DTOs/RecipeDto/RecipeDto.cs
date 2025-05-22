@@ -12,11 +12,10 @@ namespace DTOs.RecipeDto
         public string? CookTime { get; set; }
         public double Servings { get; set; }
         public DifficultyLevel Difficulty { get; set; }
-
         public int CategoryId { get; set; }
 
-        public ICollection<IngredientDto.IngredientDto> Ingredients { get; set; } = new List<IngredientDto.IngredientDto>();
-        //public ICollection<ImageDto.ImageDto> Images { get; set; } = new List<ImageDto.ImageDto>();
-        public ICollection<TagDto.TagDto> Tags { get; set; } = new List<TagDto.TagDto>();
+        // Change to mutable lists for AutoMapper compatibility
+        public List<IngredientDto.IngredientDto> Ingredients { get; set; } = new();
+        public List<TagDto.TagDto> Tags { get; set; } = new();
     }
 }

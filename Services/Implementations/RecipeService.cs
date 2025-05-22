@@ -159,7 +159,7 @@ namespace Services.Implementations
             }
             catch (RecipeDataException ex)
             {
-                throw new RecipeDataException($"Error while getting the categories: {ex.Message}");
+                throw new RecipeDataException($"Error while adding recipe: {ex.Message}");
             }
         }
 

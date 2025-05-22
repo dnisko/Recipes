@@ -2,11 +2,10 @@
 
 namespace DTOs.RecipeDto
 {
-    public class AddRecipeDto
+    public class AddRecipeDto()
     {
-        [Required]
-        [MaxLength(100)]
-        public string? Name { get; set; }
+        [Required] [MaxLength(100)] public string? Name { get; set; }
+
         public string? Description { get; set; }
         public string? Instructions { get; set; }
         public string? ImagePath { get; set; }
@@ -15,8 +14,9 @@ namespace DTOs.RecipeDto
         public double? Servings { get; set; }
         public int Difficulty { get; set; }
         public int CategoryId { get; set; }
-        [Required]
-        public List<IngredientDto.IngredientDto>? Ingredients { get; set; }
-        public List<TagDto.TagDto>? Tags { get; set; }
+
+        // Initialize collections directly
+        public List<IngredientDto.IngredientDto> Ingredients { get; set; } = new();
+        public List<TagDto.TagDto> Tags { get; set; } = new();
     }
 }
