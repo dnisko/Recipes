@@ -11,5 +11,6 @@ namespace Services.Interfaces
         Task<CustomResponse<List<CategoryDto>>> GetAllCategoriesAsync();
         Task<CustomResponse<List<CategoryDto>>> GetCategoriesWithTheirRecipesAsync();
         Task<CustomResponse> DeleteCategoryAsync(int id);
+        Task<CustomResponse<CategoryDto>> AddCategory(AddCategoryDto categoryDto);
     }
 }

@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
 using Common.Exceptions.CategoryException;
-using Common.Exceptions.IngredientException;
-using Common.Exceptions.TagException;
+using Common.Exceptions.RecipeException;
 using Common.Responses;
-using DataAccess.Implementations;
 using DataAccess.Interfaces;
 using DomainModels;
 using DTOs.CategoryDto;
-using DTOs.IngredientDto;
-using DTOs.TagDto;
 using Microsoft.Extensions.Logging;
 using Services.Interfaces;
 
@@ -94,5 +90,20 @@ namespace Services.Implementations
             }
         }
 
+        public async Task<CustomResponse<CategoryDto>> AddCategory(AddCategoryDto categoryDto)
+        {
+            try
+            {
+                var categoryEntity = _mapper.Map<Category>(categoryDto);
+                await _categoryRepository.AddAsync(categoryEntity);
+
+                var categoryDtoResult = _mapper.Map<CategoryDto>(categoryEntity);
+                return new CustomResponse<CategoryDto>(categoryDtoResult);
+            }
+            catch (CategoryDataException ex)
+            {
+                throw new CategoryDataException($"Error while adding category: {ex.Message}");
+            }
+        }
     }
 }

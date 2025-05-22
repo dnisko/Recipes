@@ -13,44 +13,30 @@ namespace Mappers
     {
         public AutoMapperProfile()
         {
-            CreateMap<Category, AddCategoryDto>().ReverseMap();
-            CreateMap<Category, UpdateCategoryDto>().ReverseMap();
-            CreateMap<Category, CategoryDto>().ReverseMap();
-
-            CreateMap<Image, AddImageDto>().ReverseMap();
-            CreateMap<Image, UpdateImageDto>().ReverseMap();
-            CreateMap<Image, ImageDto>().ReverseMap();
-
-            CreateMap<Ingredient, AddIngredientDto>()
-                //.ForMember(dest => dest.Id,
-                //    opt => 
-                //        opt.Ignore())
-                .ReverseMap();
-            CreateMap<Ingredient, UpdateIngredientDto>().ReverseMap();
-            CreateMap<Ingredient, IngredientDto>().ReverseMap();
-
-            CreateMap<Recipe, AddRecipeDto>()
-                //.ForMember(dest => dest.Difficulty,
-                //    opt => 
-                //        opt.MapFrom
-                //            ((src => 
-                //                (DifficultyLevel)src.Difficulty)))
-                .ReverseMap()
-                .ForMember(dest => dest._ingredients, opt => opt.MapFrom(src => src.Ingredients))
-                .ForMember(dest => dest._tags, opt => opt.MapFrom(src => src.Tags));
-            CreateMap<Recipe, UpdateRecipeDto>().ReverseMap();
+            // Recipe mappings
             CreateMap<Recipe, RecipeDto>()
                 .ReverseMap()
-                .ForMember(dest => dest._ingredients, opt => opt.MapFrom(src => src.Ingredients))
-                .ForMember(dest => dest._tags, opt => opt.MapFrom(src => src.Tags));
+                .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients))
+                .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
+            CreateMap<AddRecipeDto, Recipe>()
+                .ReverseMap()
+                .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients))
+                .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
+            CreateMap<UpdateRecipeDto, Recipe>().ReverseMap();
+                //.ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients))
+                //.ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
 
-            CreateMap<Tag, AddTagDto>().ReverseMap();
-            CreateMap<Tag, UpdateTagDto>().ReverseMap();
+            // Ingredient mappings
+            CreateMap<Ingredient, IngredientDto>().ReverseMap();
+            CreateMap<IngredientDto, Ingredient>().ReverseMap();
+
+            // Tag mappings
             CreateMap<Tag, TagDto>().ReverseMap();
+            CreateMap<TagDto, Tag>().ReverseMap();
 
-            CreateMap<User, AddUserDto>().ReverseMap();
-            CreateMap<User, UpdateUserDto>().ReverseMap();
-            CreateMap<User, UserDto>().ReverseMap();
+            // Category mappings
+            CreateMap<Category, CategoryDto>().ReverseMap();
+            CreateMap<CategoryDto, Category>().ReverseMap();
         }
     }
 }

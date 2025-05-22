@@ -4,8 +4,8 @@ namespace DomainModels
 {
     public class Recipe : BaseEntity
     {
-        public List<Ingredient> _ingredients { get; set; } = [];
-        public List<Tag> _tags { get; set; } = [];
+        //public List<Ingredient> _ingredients { get; set; } = [];
+        //public List<Tag> _tags { get; set; } = [];
 
         [Required]
         [MaxLength(100)]
@@ -27,7 +27,7 @@ namespace DomainModels
         ////public ICollection<Image> Images { get; set; } = new List<Image>();
         //public ICollection<Tag> Tags { get; set; } = new List<Tag>();
         
-        public IReadOnlyCollection<Ingredient> Ingredients => _ingredients.AsReadOnly();
-        public IReadOnlyCollection<Tag> Tags => _tags.AsReadOnly();
+        public ICollection<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
+        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
     }
 }

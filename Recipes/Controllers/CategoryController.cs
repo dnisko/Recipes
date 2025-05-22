@@ -1,5 +1,6 @@
 ﻿using Common.Exceptions.CategoryException;
 using Common.Exceptions.ServerException;
+using DTOs.CategoryDto;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
@@ -66,6 +67,22 @@ namespace Recipes.Controllers
             }
         }
 
-        
+        [HttpPost("addCategory")]
+        public async Task<IActionResult> AddCategory(AddCategoryDto categoryDto)
+        {
+            try
+            {
+                var response = await _categoryService.AddCategory(categoryDto);
+                return Ok(response);
+            }
+            catch (CategoryDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

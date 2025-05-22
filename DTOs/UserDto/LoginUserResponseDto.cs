@@ -2,7 +2,7 @@
 {
     public class LoginUserResponseDto
     {
-        public string Token { get; set; }
+        public string? Token { get; set; }
         public DateTime ValidTo { get; set; }
     }
 }

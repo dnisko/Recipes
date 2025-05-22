@@ -3,6 +3,8 @@
     public class CategoryDto
     {
         public string Name { get; set; }
-        public ICollection<RecipeDto.RecipeDto> Recipes { get; set; } = new List<RecipeDto.RecipeDto>();
+
+        // Optional: Include this if you want to return recipe info with the category
+        public List<RecipeDto.RecipeDto> Recipes { get; set; }
     }
 }

@@ -29,14 +29,17 @@ namespace DataAccess.Implementations
         public async Task<IEnumerable<Recipe>> SearchRecipes(string keyword)
         {
             return await _context.Recipes
-                .Where(x => x.Name.ToLower().Contains(keyword.ToLower()))
+                .Where(x => x.Name.ToLower().Contains(keyword.ToLower()) ||
+                            x.Description.ToLower().Contains(keyword.ToLower()))
                 .ToListAsync();
         }
 
         public async Task<Recipe> GetRecipeDetails(int recipeId)
         {
             return await _context.Recipes
-                .FirstOrDefaultAsync(x => x.Id == recipeId);
+                .Include(r => r.Ingredients)
+                .Include(r => r.Tags)
+                .FirstOrDefaultAsync(r => r.Id == recipeId);
         }
     }
 }

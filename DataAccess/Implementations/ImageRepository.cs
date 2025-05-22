@@ -12,7 +12,7 @@ namespace DataAccess.Implementations
             _context = context;
         }
 
-        public async Task<IEnumerable<Image>> GetImagesByRecipe(int recipeId)
+        public Task<IEnumerable<Image>>? GetImagesByRecipe(int recipeId)
         {
             return null; //await _context.Images.Where(x => x.RecipeId == recipeId).ToListAsync();
         }
