@@ -1,7 +1,9 @@
-﻿using Common.Exceptions.RecipeException;
+﻿using Common.Exceptions.CategoryException;
+using Common.Exceptions.RecipeException;
 using Common.Exceptions.ServerException;
 using DTOs.RecipeDto;
 using Microsoft.AspNetCore.Mvc;
+using Services.Implementations;
 using Services.Interfaces;
 
 namespace Recipes.Controllers
@@ -170,6 +172,61 @@ namespace Recipes.Controllers
                 return Response(response);
             }
             catch (RecipeDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        //Ingredient
+        [HttpGet("GetIngredientsByRecipe/{recipeId}")]
+        public async Task<IActionResult> GetIngredientsByRecipe(int recipeId)
+        {
+            try
+            {
+                var response = await _recipeService.GetIngredientsByRecipe(recipeId);
+                return Ok(response);
+            }
+            catch (CategoryDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        //Tags
+        [HttpGet("GetPopularTags")]
+        public async Task<IActionResult> GetPopularTags()
+        {
+            try
+            {
+                var response = await _recipeService.GetPopularTagsAsync();
+                return Ok(response);
+            }
+            catch (CategoryDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpGet("GetTagsByARecipe/{id}")]
+        public async Task<IActionResult> GetTagsByARecipe(int id)
+        {
+            try
+            {
+                var response = await _recipeService.GetTagsByARecipeAsync(id);
+                return Ok(response);
+            }
+            catch (CategoryDataException ex)
             {
                 return BadRequest(ex.Message);
             }

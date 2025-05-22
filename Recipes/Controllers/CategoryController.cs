@@ -66,59 +66,6 @@ namespace Recipes.Controllers
             }
         }
 
-        //Ingredient
-        [HttpGet("GetIngredientsByRecipe/{recipeId}")]
-        public async Task<IActionResult> GetIngredientsByRecipe(int recipeId)
-        {
-            try
-            {
-                var response = await _categoryService.GetIngredientsByRecipe(recipeId);
-                return Ok(response);
-            }
-            catch (CategoryDataException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (InternalServerErrorException ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        //Tags
-        [HttpGet("GetPopularTags")]
-        public async Task<IActionResult> GetPopularTags()
-        {
-            try
-            {
-                var response = await _categoryService.GetPopularTagsAsync();
-                return Ok(response);
-            }
-            catch (CategoryDataException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (InternalServerErrorException ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-        [HttpGet("GetTagsByARecipe/{id}")]
-        public async Task<IActionResult> GetTagsByARecipe(int id)
-        {
-            try
-            {
-                var response = await _categoryService.GetTagsByARecipeAsync(id);
-                return Ok(response);
-            }
-            catch (CategoryDataException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (InternalServerErrorException ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
+        
     }
 }

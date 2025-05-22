@@ -20,19 +20,20 @@ namespace Services.Helpers
             services.AddDbContext<RecipeDbContext>(options =>
                 options.UseSqlServer(connectionString)
                     //.EnableSensitiveDataLogging() // This enables detailed logging of SQL queries
-                    .LogTo(Console.WriteLine, LogLevel.Information));//,
+                    .LogTo(Console.WriteLine, LogLevel.Information)); //,
             //ServiceLifetime.Scoped);
 
             return services;
         }
+
         public static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
-            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
-            services.AddTransient<ICategoryRepository, CategoryRepository>();
-            services.AddTransient<IImageRepository, ImageRepository>();
-            services.AddTransient<IIngredientRepository, IngredientRepository>();
-            services.AddTransient<IRecipeRepository, RecipeRepository>();
-            services.AddTransient<ITagRepository, TagRepository>();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IIngredientRepository, IngredientRepository>();
+            services.AddScoped<IRecipeRepository, RecipeRepository>();
+            services.AddScoped<ITagRepository, TagRepository>();
             return services;
         }
 
@@ -46,6 +47,7 @@ namespace Services.Helpers
         {
             services.AddSwaggerGen(c =>
             {
+                //c.TagActionsBy(api => new[] { api.GroupName ?? "Uncategorized" });
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "Recipes API",

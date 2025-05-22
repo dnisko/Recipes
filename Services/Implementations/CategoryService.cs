@@ -17,20 +17,16 @@ namespace Services.Implementations
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        private readonly IIngredientRepository _ingredientRepository;
-        private readonly ITagRepository _tagRepository;
-        private readonly ILogger<IRecipeService> _logger;
+        
+        private readonly ILogger<ICategoryService> _logger;
         private readonly IMapper _mapper;
 
         public CategoryService(ICategoryRepository categoryRepository,
-            IIngredientRepository ingredientRepository,
-            ITagRepository tagRepository,
-            ILogger<IRecipeService> logger,
+            
+            ILogger<ICategoryService> logger,
             IMapper mapper)
         {
             _categoryRepository = categoryRepository;
-            _ingredientRepository = ingredientRepository;
-            _tagRepository = tagRepository;
             _logger = logger;
             _mapper = mapper;
         }
@@ -98,64 +94,5 @@ namespace Services.Implementations
             }
         }
 
-        //Ingredients
-        public async Task<CustomResponse<List<IngredientDto>>> GetIngredientsByRecipe(int recipeId)
-        {
-            try
-            {
-                var ingredients = await _ingredientRepository.GetIngredientsByRecipe(recipeId);
-                if (ingredients == null || !ingredients.Any())
-                {
-                    _logger.LogError($"No ingredients found for recipe with id {recipeId}.");
-                    return new CustomResponse<List<IngredientDto>>($"No ingredients found for recipe with id {recipeId}.");
-                }
-                var ingredientDto = _mapper.Map<List<IngredientDto>>(ingredients);
-                return new CustomResponse<List<IngredientDto>>(ingredientDto);
-            }
-            catch (IngredientDataException ex)
-            {
-                throw new IngredientDataException($"Error while getting the categories: {ex.Message}");
-            }
-        }
-
-
-        //Tag
-        public async Task<CustomResponse<List<TagDto>>> GetPopularTagsAsync()
-        {
-            try
-            {
-                var tags = await _tagRepository.GetPopularTags();
-                if (tags == null || !tags.Any())
-                {
-                    _logger.LogError($"No tags found.");
-                    return new CustomResponse<List<TagDto>>($"No tags found.");
-                }
-                var tagDto = _mapper.Map<List<TagDto>>(tags);
-                return new CustomResponse<List<TagDto>>(tagDto);
-            }
-            catch (TagDataException ex)
-            {
-                throw new TagDataException($"Error while getting the categories: {ex.Message}");
-            }
-        }
-
-        public async Task<CustomResponse<List<TagDto>>> GetTagsByARecipeAsync(int id)
-        {
-            try
-            {
-                var tags = await _tagRepository.GetTagsByRecipe(id);
-                if (tags == null || !tags.Any())
-                {
-                    _logger.LogError($"No tags found.");
-                    return new CustomResponse<List<TagDto>>($"No tags found.");
-                }
-                var tagDto = _mapper.Map<List<TagDto>>(tags);
-                return new CustomResponse<List<TagDto>>(tagDto);
-            }
-            catch (TagDataException ex)
-            {
-                throw new TagDataException($"Error while getting the categories: {ex.Message}");
-            }
-        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Common.Responses;
+using DTOs.IngredientDto;
 using DTOs.RecipeDto;
+using DTOs.TagDto;
 
 namespace Services.Interfaces
 {
@@ -15,5 +17,12 @@ namespace Services.Interfaces
         Task<CustomResponse> AddRecipeAsync(RecipeDto recipe);
         Task<CustomResponse> UpdateRecipeAsync(RecipeDto recipe);
         Task<CustomResponse> DeleteRecipeAsync(int id);
+
+        //Ingredient
+        Task<CustomResponse<List<IngredientDto>>> GetIngredientsByRecipe(int recipeId);
+
+        //Tag
+        Task<CustomResponse<List<TagDto>>> GetPopularTagsAsync();
+        Task<CustomResponse<List<TagDto>>> GetTagsByARecipeAsync(int id);
     }
 }
