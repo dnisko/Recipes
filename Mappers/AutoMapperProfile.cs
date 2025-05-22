@@ -21,7 +21,11 @@ namespace Mappers
             CreateMap<Image, UpdateImageDto>().ReverseMap();
             CreateMap<Image, ImageDto>().ReverseMap();
 
-            CreateMap<Ingredient, AddIngredientDto>().ReverseMap();
+            CreateMap<Ingredient, AddIngredientDto>()
+                //.ForMember(dest => dest.Id,
+                //    opt => 
+                //        opt.Ignore())
+                .ReverseMap();
             CreateMap<Ingredient, UpdateIngredientDto>().ReverseMap();
             CreateMap<Ingredient, IngredientDto>().ReverseMap();
 
@@ -33,11 +37,11 @@ namespace Mappers
                                 (DifficultyLevel)src.Difficulty)))
                 .ReverseMap();
             CreateMap<Recipe, UpdateRecipeDto>().ReverseMap();
-            CreateMap<Ingredient, RecipeDto>().ReverseMap();
+            CreateMap<Recipe, RecipeDto>().ReverseMap();
 
             CreateMap<Tag, AddTagDto>().ReverseMap();
-            CreateMap<Recipe, UpdateTagDto>().ReverseMap();
-            CreateMap<Recipe, TagDto>().ReverseMap();
+            CreateMap<Tag, UpdateTagDto>().ReverseMap();
+            CreateMap<Tag, TagDto>().ReverseMap();
 
             CreateMap<User, AddUserDto>().ReverseMap();
             CreateMap<User, UpdateUserDto>().ReverseMap();

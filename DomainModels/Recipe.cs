@@ -5,6 +5,7 @@ namespace DomainModels
     public class Recipe : BaseEntity
     {
         [Required]
+        [MaxLength(100)]
         public string? Name { get; set; }
         public string? Description { get; set; }
         [Required]

@@ -15,16 +15,17 @@ namespace DataAccess.Configurations
 
             //builder.HasIndex(r => r.Name).IsUnique();
             builder.HasMany(r => r.Tags)
-                .WithMany(t => t.Recipes)
-                .UsingEntity<RecipeTag>(
-                    j => j.ToTable("RecipeTags")
-                        .HasOne(rt => rt.Tag)
-                        .WithMany()
-                        .OnDelete(DeleteBehavior.NoAction), // Specify NoAction for the Tag relationship
-                    j => j.HasOne(rt => rt.Recipe)
-                        .WithMany()
-                        .OnDelete(DeleteBehavior.NoAction) // Specify NoAction for the Recipe relationship
-                );
+                //.WithMany(t => t.Recipes)
+                //.UsingEntity<RecipeTag>(
+                //    j => j.ToTable("RecipeTags")
+                //        .HasOne(rt => rt.Tag)
+                //        .WithMany()
+                //        .OnDelete(DeleteBehavior.NoAction), // Specify NoAction for the Tag relationship
+                //    j => j.HasOne(rt => rt.Recipe)
+                //        .WithMany()
+                //        .OnDelete(DeleteBehavior.NoAction) // Specify NoAction for the Recipe relationship
+                //);
+                ;
 
             builder.HasIndex(r => r.Name).IsUnique();
         }
