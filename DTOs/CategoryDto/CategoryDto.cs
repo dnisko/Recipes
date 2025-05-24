@@ -2,6 +2,7 @@
 {
     public class CategoryDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }
 
         // Optional: Include this if you want to return recipe info with the category

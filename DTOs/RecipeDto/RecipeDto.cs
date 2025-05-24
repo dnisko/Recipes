@@ -4,6 +4,7 @@ namespace DTOs.RecipeDto
 {
     public class RecipeDto
     {
+        public int Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
         public string? Instructions { get; set; }
@@ -11,7 +12,7 @@ namespace DTOs.RecipeDto
         public string? PrepTime { get; set; }
         public string? CookTime { get; set; }
         public double Servings { get; set; }
-        public DifficultyLevel Difficulty { get; set; }
+        public int Difficulty { get; set; }
         public int CategoryId { get; set; }
 
         // Change to mutable lists for AutoMapper compatibility

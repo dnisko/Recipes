@@ -4,6 +4,7 @@ namespace DTOs.IngredientDto
 {
     public class IngredientDto
     {
+        public int Id { get; set; }
         [Required]
         [MaxLength(50)]
         public string? Name { get; set; }
@@ -12,6 +13,6 @@ namespace DTOs.IngredientDto
         [Required]
         [MaxLength(20)]
         public string? Unit { get; set; }
-        //public int RecipeId { get; set; }
+        public int RecipeId { get; set; }
     }
 }

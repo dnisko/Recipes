@@ -8,7 +8,7 @@ namespace Services.Interfaces
     public interface IRecipeService
     {
         Task<CustomResponse<List<RecipeDto>>> GetAllRecipesAsync();
-        Task<CustomResponse<List<RecipeDto>>> GetRecipeByIdAsync(int id);
+        Task<CustomResponse<RecipeDto>> GetRecipeByIdAsync(int id);
         Task<CustomResponse<List<RecipeDto>>> GetRecipesByCategoryAsync(int categoryId);
         Task<CustomResponse<List<RecipeDto>>> SearchRecipesAsync(string keyword);
         Task<CustomResponse<List<RecipeDto>>> GetRecipesWithTagsAsync();

@@ -7,6 +7,7 @@ using DomainModels;
 using DTOs.CategoryDto;
 using Microsoft.Extensions.Logging;
 using Services.Interfaces;
+using System.Collections.Generic;
 
 namespace Services.Implementations
 {
@@ -37,8 +38,8 @@ namespace Services.Implementations
                     _logger.LogError("No categories found.");
                     return new CustomResponse<List<CategoryDto>>($"No categories found.");
                 }
-                var categoriesDto = _mapper.Map<CustomResponse<List<CategoryDto>>>(categories);
-                return categoriesDto;
+                var categoriesDto = _mapper.Map<List<CategoryDto>>(categories);
+                return new CustomResponse<List<CategoryDto>>(categoriesDto);
             }
             catch (CategoryDataException ex)
             {
@@ -56,8 +57,8 @@ namespace Services.Implementations
                     _logger.LogError("No categories with recipes found.");
                     return new CustomResponse<List<CategoryDto>>($"No categories with recipes found.");
                 }
-                var categoriesWithRecipesDto = _mapper.Map<CustomResponse<List<CategoryDto>>>(categoriesWithRecipes);
-                return categoriesWithRecipesDto;
+                var categoriesWithRecipesDto = _mapper.Map<List<CategoryDto>>(categoriesWithRecipes);
+                return new CustomResponse<List<CategoryDto>>(categoriesWithRecipesDto);
             }
             catch (CategoryDataException ex)
             {

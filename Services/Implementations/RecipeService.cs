@@ -52,18 +52,18 @@ namespace Services.Implementations
             }
         }
 
-        public async Task<CustomResponse<List<RecipeDto>>> GetRecipeByIdAsync(int id)
+        public async Task<CustomResponse<RecipeDto>> GetRecipeByIdAsync(int id)
         {
             try
             {
-                var recipe = await _recipeRepository.GetByIdAsync(id);
+                var recipe = await _recipeRepository.GetRecipeDetails(id);
                 if (recipe == null)
                 {
                     _logger.LogError($"Recipe with id {id} not found.");
-                    return new CustomResponse<List<RecipeDto>>($"Recipe with id {id} not found.");
+                    return new CustomResponse<RecipeDto>($"Recipe with id {id} not found.");
                 }
-                var recipeDto = _mapper.Map<List<RecipeDto>>(recipe);
-                return new CustomResponse<List<RecipeDto>>(recipeDto);
+                var recipeDto = _mapper.Map<RecipeDto>(recipe);
+                return new CustomResponse<RecipeDto>(recipeDto);
             }
             catch (RecipeDataException ex)
             {

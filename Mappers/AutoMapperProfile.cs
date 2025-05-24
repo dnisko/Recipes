@@ -12,10 +12,13 @@ namespace Mappers
         public AutoMapperProfile()
         {
             // Recipe mappings
+            /*
             CreateMap<Recipe, RecipeDto>()
                 .ReverseMap()
                 .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients))
-                .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
+                .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags))
+                .ForMember(dest => dest.Difficulty, opt => opt.MapFrom(src => (int)src.Difficulty))
+                .ForMember(dest => dest.Difficulty, opt => opt.MapFrom(src => (DifficultyLevel)src.Difficulty));
             CreateMap<Recipe, AddRecipeDto>()
                 .ReverseMap()
                 .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients))
@@ -23,7 +26,20 @@ namespace Mappers
             CreateMap<Recipe, UpdateRecipeDto>().ReverseMap();
                 //.ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients))
                 //.ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
+            */
+            CreateMap<Recipe, RecipeDto>()
+                .ForMember(dest => dest.Difficulty, opt => opt.MapFrom(src => (int)src.Difficulty))
+                .ReverseMap()
+                .ForMember(dest => dest.Difficulty, opt => opt.MapFrom(src => (DifficultyLevel)src.Difficulty));
 
+            CreateMap<Recipe, AddRecipeDto>()
+                .ReverseMap()
+                .ForMember(dest => dest.Difficulty, opt => opt.MapFrom(src => (DifficultyLevel)src.Difficulty));
+
+            CreateMap<Recipe, UpdateRecipeDto>()
+                .ReverseMap()
+                .ForMember(dest => dest.Difficulty, opt => opt.MapFrom(src => (DifficultyLevel)src.Difficulty));
+            
             // Ingredient mappings
             CreateMap<Ingredient, IngredientDto>().ReverseMap();
             CreateMap<Ingredient, AddIngredientDto>().ReverseMap();
@@ -35,7 +51,11 @@ namespace Mappers
             CreateMap<Tag, UpdateTagDto>().ReverseMap();
 
             // Category mappings
-            CreateMap<Category, CategoryDto>().ReverseMap();
+            CreateMap<Category, CategoryDto>()
+                .ForMember(dest => dest.Recipes,
+                    opt => opt.MapFrom((
+                        src => src.Recipes)))
+                .ReverseMap();
             CreateMap<Category, AddCategoryDto>().ReverseMap();
             CreateMap<Category, UpdateCategoryDto>().ReverseMap();
         }
