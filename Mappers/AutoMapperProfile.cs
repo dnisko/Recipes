@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using DomainModels;
 using DTOs.CategoryDto;
-using DTOs.ImageDto;
 using DTOs.IngredientDto;
 using DTOs.RecipeDto;
 using DTOs.TagDto;
-using DTOs.UserDto;
 
 namespace Mappers
 {
@@ -18,25 +16,28 @@ namespace Mappers
                 .ReverseMap()
                 .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients))
                 .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
-            CreateMap<AddRecipeDto, Recipe>()
+            CreateMap<Recipe, AddRecipeDto>()
                 .ReverseMap()
                 .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients))
                 .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
-            CreateMap<UpdateRecipeDto, Recipe>().ReverseMap();
+            CreateMap<Recipe, UpdateRecipeDto>().ReverseMap();
                 //.ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients))
                 //.ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
 
             // Ingredient mappings
             CreateMap<Ingredient, IngredientDto>().ReverseMap();
-            CreateMap<IngredientDto, Ingredient>().ReverseMap();
+            CreateMap<Ingredient, AddIngredientDto>().ReverseMap();
+            CreateMap<Ingredient, UpdateIngredientDto>().ReverseMap();
 
             // Tag mappings
             CreateMap<Tag, TagDto>().ReverseMap();
-            CreateMap<TagDto, Tag>().ReverseMap();
+            CreateMap<Tag, AddTagDto>().ReverseMap();
+            CreateMap<Tag, UpdateTagDto>().ReverseMap();
 
             // Category mappings
             CreateMap<Category, CategoryDto>().ReverseMap();
-            CreateMap<CategoryDto, Category>().ReverseMap();
+            CreateMap<Category, AddCategoryDto>().ReverseMap();
+            CreateMap<Category, UpdateCategoryDto>().ReverseMap();
         }
     }
 }
