@@ -1,17 +1,22 @@
-﻿using DomainModels;
+﻿using System.ComponentModel.DataAnnotations;
+using DomainModels;
 
 namespace DTOs.RecipeDto
 {
     public class RecipeDto
     {
         public int Id { get; set; }
-        public string? Name { get; set; }
+        [Required]
+        public string Name { get; set; }
         public string? Description { get; set; }
-        public string? Instructions { get; set; }
+        [Required]
+        public string Instructions { get; set; }
         public string? ImagePath { get; set; }
         public string? PrepTime { get; set; }
         public string? CookTime { get; set; }
+        [Range(1, 100)]
         public double Servings { get; set; }
+        [Range(0, 2)]
         public int Difficulty { get; set; }
         public int CategoryId { get; set; }
 

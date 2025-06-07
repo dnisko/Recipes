@@ -5,7 +5,7 @@ namespace DomainModels
     public class Ingredient : BaseEntity
     {
         [Required]
-        public string? Name { get; set; }
+        public string Name { get; set; }
         [Range(0.01, 1000)]
         public float Quantity { get; set; }
         [MaxLength(10)]

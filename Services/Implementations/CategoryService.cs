@@ -32,14 +32,23 @@ namespace Services.Implementations
         {
             try
             {
+                //var categories = await _categoryRepository.GetAllAsync();
+                //if (categories == null || !categories.Any())
+                //{
+                //    _logger.LogError("No categories found.");
+                //    return new CustomResponse<List<CategoryDto>>($"No categories found.");
+                //}
+                //var categoriesDto = _mapper.Map<List<CategoryDto>>(categories);
+                //return new CustomResponse<List<CategoryDto>>(categoriesDto);
                 var categories = await _categoryRepository.GetAllAsync();
-                if (categories == null || !categories.Any())
+                var response = CustomResponse<List<CategoryDto>>.FromList(categories, "No categories found.");
+
+                if (!response.IsSuccessful)
                 {
-                    _logger.LogError("No categories found.");
-                    return new CustomResponse<List<CategoryDto>>($"No categories found.");
+                    _logger.LogError(response.Errors.FirstOrDefault() ?? "No categories found.");
                 }
-                var categoriesDto = _mapper.Map<List<CategoryDto>>(categories);
-                return new CustomResponse<List<CategoryDto>>(categoriesDto);
+                var categoriesDto = _mapper.Map<CustomResponse<List<CategoryDto>>>(response);
+                return categoriesDto;
             }
             catch (CategoryDataException ex)
             {

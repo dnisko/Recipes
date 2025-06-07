@@ -109,7 +109,7 @@ namespace Services.Implementations
             }
         }
 
-        public async Task<CustomResponse<List<RecipeDto>>> GetRecipesWithTagsAsync()
+        /*public async Task<CustomResponse<List<RecipeDto>>> GetRecipesWithTagsAsync()
         {
             try
             {
@@ -126,9 +126,9 @@ namespace Services.Implementations
             {
                 throw new RecipeDataException($"Error while getting the categories: {ex.Message}");
             }
-        }
+        }*/
 
-        public async Task<CustomResponse<List<RecipeDto>>> GetRecipeDetailsAsync(int recipeId)
+        /*public async Task<CustomResponse<List<RecipeDto>>> GetRecipeDetailsAsync(int recipeId)
         {
             try
             {
@@ -145,7 +145,7 @@ namespace Services.Implementations
             {
                 throw new RecipeDataException($"Error while getting the categories: {ex.Message}");
             }
-        }
+        }*/
 
         public async Task<CustomResponse> AddRecipeAsync(RecipeDto recipe)
         {

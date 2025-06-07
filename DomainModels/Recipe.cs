@@ -9,10 +9,10 @@ namespace DomainModels
 
         [Required]
         [MaxLength(100)]
-        public string? Name { get; set; }
+        public string Name { get; set; }
         public string? Description { get; set; }
         [Required]
-        public string? Instructions { get; set; }
+        public string Instructions { get; set; }
         public string? ImagePath { get; set; }
         public string? PrepTime { get; set; }
         public string? CookTime { get; set; }
