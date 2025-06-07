@@ -38,13 +38,14 @@ namespace Services.Implementations
             try
             {
                 var recipes = await _recipeRepository.GetAllAsync();
-                if (recipes == null || !recipes.Any())
-                {
-                    _logger.LogError("No recipes found.");
-                    return new CustomResponse<List<RecipeDto>>($"No recipes found.");
-                }
-                var recipesDto = _mapper.Map<List<RecipeDto>>(recipes);
-                return new CustomResponse<List<RecipeDto>>(recipesDto);
+                //if (recipes == null || !recipes.Any())
+                //{
+                //    _logger.LogError("No recipes found.");
+                //    return new CustomResponse<List<RecipeDto>>($"No recipes found.");
+                //}
+                var response = CustomResponseFactory.FromList(recipes, "No recipes found.");
+                var recipesDto = _mapper.Map<CustomResponse<List<RecipeDto>>>(response);
+                return recipesDto;
             }
             catch (RecipeDataException ex)
             {
@@ -60,10 +61,10 @@ namespace Services.Implementations
                 if (recipe == null)
                 {
                     _logger.LogError($"Recipe with id {id} not found.");
-                    return new CustomResponse<RecipeDto>($"Recipe with id {id} not found.");
+                    return CustomResponse<RecipeDto>.Fail($"Recipe with id {id} not found.");
                 }
                 var recipeDto = _mapper.Map<RecipeDto>(recipe);
-                return new CustomResponse<RecipeDto>(recipeDto);
+                return CustomResponse<RecipeDto>.Success(recipeDto);
             }
             catch (RecipeDataException ex)
             {
@@ -76,13 +77,14 @@ namespace Services.Implementations
             try
             {
                 var recipes = await _recipeRepository.GetRecipesByCategory(categoryId);
-                if (recipes == null || !recipes.Any())
-                {
-                    _logger.LogError($"No recipes found for category with id {categoryId}.");
-                    return new CustomResponse<List<RecipeDto>>($"No recipes found for category with id {categoryId}.");
-                }
-                var recipesDto = _mapper.Map<List<RecipeDto>>(recipes);
-                return new CustomResponse<List<RecipeDto>>(recipesDto);
+                //if (recipes == null || !recipes.Any())
+                //{
+                //    _logger.LogError($"No recipes found for category with id {categoryId}.");
+                //    return new CustomResponse<List<RecipeDto>>($"No recipes found for category with id {categoryId}.");
+                //}
+                var response = CustomResponseFactory.FromList(recipes, $"No recipes found for category with id {categoryId}.");
+                var recipesDto = _mapper.Map<CustomResponse<List<RecipeDto>>>(response);
+                return recipesDto;
             }
             catch (RecipeDataException ex)
             {
@@ -95,13 +97,14 @@ namespace Services.Implementations
             try
             {
                 var recipes = await _recipeRepository.SearchRecipes(keyword);
-                if (recipes == null || !recipes.Any())
-                {
-                    _logger.LogError($"No recipes found with keyword {keyword}.");
-                    return new CustomResponse<List<RecipeDto>>($"No recipes found with keyword {keyword}.");
-                }
-                var recipesDto = _mapper.Map<List<RecipeDto>>(recipes);
-                return new CustomResponse<List<RecipeDto>>(recipesDto);
+                //if (recipes == null || !recipes.Any())
+                //{
+                //    _logger.LogError($"No recipes found with keyword {keyword}.");
+                //    return new CustomResponse<List<RecipeDto>>($"No recipes found with keyword {keyword}.");
+                //}
+                var response = CustomResponseFactory.FromList(recipes, $"No recipes found with keyword {keyword}.");
+                var recipesDto = _mapper.Map<CustomResponse<List<RecipeDto>>>(response);
+                return recipesDto;
             }
             catch (RecipeDataException ex)
             {
@@ -155,7 +158,7 @@ namespace Services.Implementations
                 await _recipeRepository.AddAsync(recipeEntity);
                 //await _recipeRepository.SaveChangesAsync();
                 var recipeDto = _mapper.Map<RecipeDto>(recipeEntity);
-                return new CustomResponse<RecipeDto>(recipeDto);
+                return CustomResponse<RecipeDto>.Success(recipeDto);
             }
             catch (RecipeDataException ex)
             {
@@ -171,7 +174,7 @@ namespace Services.Implementations
                 await _recipeRepository.UpdateAsync(recipeEntity);
                 //await _recipeRepository.SaveChangesAsync();
                 var recipeDto = _mapper.Map<RecipeDto>(recipeEntity);
-                return new CustomResponse<RecipeDto>(recipeDto);
+                return CustomResponse<RecipeDto>.Success(recipeDto);
             }
             catch (RecipeDataException ex)
             {
@@ -187,16 +190,12 @@ namespace Services.Implementations
                 if (recipe == null)
                 {
                     _logger.LogError($"Recipe with id {id} not found.");
-                    return new CustomResponse($"Recipe with id {id} not found.");
+                    return CustomResponse.Fail($"Recipe with id {id} not found.");
                 }
-                var recipeToDelete = _mapper.Map<Recipe>(recipe);
-                await _recipeRepository.DeleteAsync(recipeToDelete);
+                await _recipeRepository.DeleteAsync(recipe);
                 //await _recipeRepository.SaveChangesAsync();
 
-                return new CustomResponse()
-                {
-                    IsSuccessful = true
-                };
+                return CustomResponse.Success($"Deleted recipe with id {id}.");
             }
             catch (RecipeNotFoundException ex)
             {
@@ -211,13 +210,14 @@ namespace Services.Implementations
             try
             {
                 var ingredients = await _ingredientRepository.GetIngredientsByRecipe(recipeId);
-                if (ingredients == null || !ingredients.Any())
-                {
-                    _logger.LogError($"No ingredients found for recipe with id {recipeId}.");
-                    return new CustomResponse<List<IngredientDto>>($"No ingredients found for recipe with id {recipeId}.");
-                }
-                var ingredientDto = _mapper.Map<List<IngredientDto>>(ingredients);
-                return new CustomResponse<List<IngredientDto>>(ingredientDto);
+                //if (ingredients == null || !ingredients.Any())
+                //{
+                //    _logger.LogError($"No ingredients found for recipe with id {recipeId}.");
+                //    return new CustomResponse<List<IngredientDto>>($"No ingredients found for recipe with id {recipeId}.");
+                //}
+                var result = CustomResponseFactory.FromList(ingredients, $"No ingredients found for recipe with id {recipeId}.");
+                var ingredientDto = _mapper.Map<CustomResponse<List<IngredientDto>>>(result);
+                return ingredientDto;
             }
             catch (IngredientDataException ex)
             {
@@ -232,13 +232,14 @@ namespace Services.Implementations
             try
             {
                 var tags = await _tagRepository.GetPopularTags();
-                if (tags == null || !tags.Any())
-                {
-                    _logger.LogError($"No tags found.");
-                    return new CustomResponse<List<TagDto>>($"No tags found.");
-                }
-                var tagDto = _mapper.Map<List<TagDto>>(tags);
-                return new CustomResponse<List<TagDto>>(tagDto);
+                //if (tags == null || !tags.Any())
+                //{
+                //    _logger.LogError($"No tags found.");
+                //    return new CustomResponse<List<TagDto>>($"No tags found.");
+                //}
+                var response = CustomResponseFactory.FromList(tags, "No tags found.");
+                var tagDto = _mapper.Map<CustomResponse<List<TagDto>>>(response);
+                return tagDto;
             }
             catch (TagDataException ex)
             {
@@ -251,13 +252,14 @@ namespace Services.Implementations
             try
             {
                 var tags = await _tagRepository.GetTagsByRecipe(id);
-                if (tags == null || !tags.Any())
-                {
-                    _logger.LogError($"No tags found.");
-                    return new CustomResponse<List<TagDto>>($"No tags found.");
-                }
-                var tagDto = _mapper.Map<List<TagDto>>(tags);
-                return new CustomResponse<List<TagDto>>(tagDto);
+                //if (tags == null || !tags.Any())
+                //{
+                //    _logger.LogError($"No tags found.");
+                //    return new CustomResponse<List<TagDto>>($"No tags found.");
+                //}
+                var result = CustomResponseFactory.FromList(tags, "No tags found.");
+                var tagDto = _mapper.Map<CustomResponse<List<TagDto>>>(result);
+                return tagDto;
             }
             catch (TagDataException ex)
             {

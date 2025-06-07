@@ -41,7 +41,7 @@ namespace Services.Implementations
                 //var categoriesDto = _mapper.Map<List<CategoryDto>>(categories);
                 //return new CustomResponse<List<CategoryDto>>(categoriesDto);
                 var categories = await _categoryRepository.GetAllAsync();
-                var response = CustomResponse<List<CategoryDto>>.FromList(categories, "No categories found.");
+                var response = CustomResponseFactory.FromList(categories, "No categories found.");
 
                 if (!response.IsSuccessful)
                 {
@@ -61,13 +61,14 @@ namespace Services.Implementations
             try
             {
                 var categoriesWithRecipes = await _categoryRepository.GetCategoriesWithRecipesAsync();
-                if (categoriesWithRecipes == null || !categoriesWithRecipes.Any())
-                {
-                    _logger.LogError("No categories with recipes found.");
-                    return new CustomResponse<List<CategoryDto>>($"No categories with recipes found.");
-                }
-                var categoriesWithRecipesDto = _mapper.Map<List<CategoryDto>>(categoriesWithRecipes);
-                return new CustomResponse<List<CategoryDto>>(categoriesWithRecipesDto);
+                //if (categoriesWithRecipes == null || !categoriesWithRecipes.Any())
+                //{
+                //    _logger.LogError("No categories with recipes found.");
+                //    return new CustomResponse<List<CategoryDto>>($"No categories with recipes found.");
+                //}
+                var response = CustomResponseFactory.FromList(categoriesWithRecipes, "No categories with recipes found.");
+                var categoriesWithRecipesDto = _mapper.Map<CustomResponse<List<CategoryDto>>>(response);
+                return categoriesWithRecipesDto;
             }
             catch (CategoryDataException ex)
             {
@@ -83,16 +84,13 @@ namespace Services.Implementations
                 if (category == null)
                 {
                     _logger.LogError($"Category with id {id} not found.");
-                    return new CustomResponse($"Category with id {id} not found.");
+                    return CustomResponse.Fail($"Category with id {id} not found.");
                 }
 
-                var categoryToDelete = _mapper.Map<Category>(category);
-                await _categoryRepository.DeleteAsync(categoryToDelete);
+                //var categoryToDelete = _mapper.Map<Category>(category);
+                await _categoryRepository.DeleteAsync(category);
 
-                return new CustomResponse()
-                {
-                    IsSuccessful = true
-                };
+                return CustomResponse.Success($"Deleted category with id: {id}.");
             }
             catch (CategoryNotFoundException ex)
             {
@@ -108,7 +106,8 @@ namespace Services.Implementations
                 await _categoryRepository.AddAsync(categoryEntity);
 
                 var categoryDtoResult = _mapper.Map<CategoryDto>(categoryEntity);
-                return new CustomResponse<CategoryDto>(categoryDtoResult);
+                //return new CustomResponse<CategoryDto>(categoryDtoResult);
+                return CustomResponse<CategoryDto>.Success(categoryDtoResult);
             }
             catch (CategoryDataException ex)
             {
