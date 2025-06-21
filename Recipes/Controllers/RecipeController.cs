@@ -91,7 +91,7 @@ namespace Recipes.Controllers
             }
         }
 
-        [HttpGet("getWithTags")]
+        /*[HttpGet("getWithTags")]
         public async Task<IActionResult> GetRecipesWithTags()
         {
             try
@@ -107,9 +107,9 @@ namespace Recipes.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-        }
+        }*/
 
-        [HttpGet("getDetails/{recipeId}")]
+        /*[HttpGet("getDetails/{recipeId}")]
         public async Task<IActionResult> GetRecipeDetails(int recipeId)
         {
             try
@@ -125,7 +125,7 @@ namespace Recipes.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-        }
+        }*/
 
         [HttpPost("add")]
         public async Task<IActionResult> AddRecipe([FromBody] RecipeDto recipe)
@@ -188,7 +188,7 @@ namespace Recipes.Controllers
             try
             {
                 var response = await _recipeService.GetIngredientsByRecipe(recipeId);
-                return Ok(response);
+                return Response(response);
             }
             catch (CategoryDataException ex)
             {
@@ -207,7 +207,7 @@ namespace Recipes.Controllers
             try
             {
                 var response = await _recipeService.GetPopularTagsAsync();
-                return Ok(response);
+                return Response(response);
             }
             catch (CategoryDataException ex)
             {
@@ -224,7 +224,7 @@ namespace Recipes.Controllers
             try
             {
                 var response = await _recipeService.GetTagsByARecipeAsync(id);
-                return Ok(response);
+                return Response(response);
             }
             catch (CategoryDataException ex)
             {

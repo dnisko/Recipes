@@ -89,6 +89,7 @@
             Result = default;
         }
 
+
         public static CustomResponse<TResult> Success(TResult result, params string[] successMessages)
             => new CustomResponse<TResult>(result, successMessages);
 
@@ -97,6 +98,11 @@
 
         public static new CustomResponse<TResult> Fail(IEnumerable<string> errors)
             => new CustomResponse<TResult>(errors);
+
+        public static CustomResponse<TResult> CreateFailed(IEnumerable<string> errors, IEnumerable<string>? successMessages = null)
+        {
+            return new CustomResponse<TResult>(errors, successMessages);
+        }
     }
 
     public static class CustomResponseFactory
@@ -110,4 +116,5 @@
             return CustomResponse<List<T>>.Success(data.ToList());
         }
     }
+
 }

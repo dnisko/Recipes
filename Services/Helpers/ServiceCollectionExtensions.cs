@@ -36,6 +36,7 @@ namespace Services.Helpers
             services.AddScoped<IIngredientRepository, IngredientRepository>();
             services.AddScoped<IRecipeRepository, RecipeRepository>();
             services.AddScoped<ITagRepository, TagRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             return services;
         }
 
@@ -44,7 +45,7 @@ namespace Services.Helpers
             services.AddScoped<IRecipeService, RecipeService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ITokenService, TokenService>();
-            //services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }

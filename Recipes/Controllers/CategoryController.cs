@@ -8,7 +8,7 @@ namespace Recipes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class CategoryController : BaseController
     {
         private readonly ICategoryService _categoryService;
         public CategoryController(ICategoryService categoryService)
@@ -21,7 +21,7 @@ namespace Recipes.Controllers
             try
             {
                 var response = await _categoryService.GetAllCategoriesAsync();
-                return Ok(response);
+                return Response(response);
             }
             catch (CategoryDataException ex)
             {
@@ -38,7 +38,7 @@ namespace Recipes.Controllers
             try
             {
                 var response = await _categoryService.GetCategoriesWithTheirRecipesAsync();
-                return Ok(response);
+                return Response(response);
             }
             catch (CategoryDataException ex)
             {
@@ -55,7 +55,7 @@ namespace Recipes.Controllers
             try
             {
                 var response = await _categoryService.DeleteCategoryAsync(id);
-                return Ok(response);
+                return Response(response);
             }
             catch (CategoryDataException ex)
             {
@@ -66,14 +66,13 @@ namespace Recipes.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
         [HttpPost("addCategory")]
         public async Task<IActionResult> AddCategory(AddCategoryDto categoryDto)
         {
             try
             {
                 var response = await _categoryService.AddCategory(categoryDto);
-                return Ok(response);
+                return Response(response);
             }
             catch (CategoryDataException ex)
             {

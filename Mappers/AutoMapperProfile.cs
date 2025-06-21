@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common.Responses;
 using DomainModels;
 using DTOs.CategoryDto;
 using DTOs.IngredientDto;
@@ -58,6 +59,9 @@ namespace Mappers
                 .ReverseMap();
             CreateMap<Category, AddCategoryDto>().ReverseMap();
             CreateMap<Category, UpdateCategoryDto>().ReverseMap();
+
+            CreateMap(typeof(CustomResponse<>), typeof(CustomResponse<>))
+                .ConvertUsing(typeof(CustomResponseTypeConverter<,>));
         }
     }
 }
