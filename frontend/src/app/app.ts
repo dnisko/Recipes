@@ -1,12 +1,25 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+ // Remove this if present
+import { CategoryService } from './services/category.service';
+import { Category } from './models/category.model';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true, // Critical for standalone apps
+  imports: [CommonModule], // Add other modules as needed
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrls: ['./app.scss']
 })
-export class App {
-  protected title = 'frontend';
+export class AppComponent {
+  categories: Category[] = [];
+
+  constructor(private categoryService: CategoryService) {}
+
+  ngOnInit() {
+    this.categoryService.getAll().subscribe({
+      next: (data) => this.categories = data,
+      error: (err) => console.error('Failed to load categories', err)
+    });
+  }
 }
