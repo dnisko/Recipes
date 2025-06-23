@@ -1,0 +1,26 @@
+<!-- src/app/components/category-list.component.html -->
+<div class="category-container">
+  <h2 class="header">Recipe Categories</h2>
+  
+  <div *ngIf="loading" class="loading-state">
+    <mat-spinner diameter="40"></mat-spinner>
+    <span>Loading categories...</span>
+  </div>
+
+  <div *ngIf="error" class="error-state">
+    <mat-icon>error_outline</mat-icon>
+    <span>{{ error }}</span>
+    <button mat-stroked-button (click)="loadCategories()">Retry</button>
+  </div>
+
+  <mat-nav-list *ngIf="!loading && !error">
+    <mat-list-item 
+      *ngFor="let category of categories" 
+      [routerLink]="['/recipes', category.id]"
+      class="category-item">
+      <mat-icon matListItemIcon>category</mat-icon>
+      <span matListItemTitle>{{ category.name }}</span>
+      <span matListItemLine>{{ category.recipes.length }} recipes</span>
+    </mat-list-item>
+  </mat-nav-list>
+</div>

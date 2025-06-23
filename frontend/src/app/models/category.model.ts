@@ -1,5 +1,12 @@
+// src/app/models/category.model.ts
 export interface Category {
   id: number;
   name: string;
-  recipes: any[]; // adjust type if you want to model recipes too
+  recipes: any[]; // or Recipe[] if you have a Recipe interface
+}
+
+export interface ApiResponse {
+  success: boolean;
+  message: string[];
+  data: Category[];
 }

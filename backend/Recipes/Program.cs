@@ -42,7 +42,7 @@ namespace Recipes
             builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddSwagger();
-            //builder.Services.AddCustomCors();
+            builder.Services.AddCustomCors();
             builder.Services.AddJwt(builder.Configuration);
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -63,6 +63,7 @@ namespace Recipes
 
             app.UseHttpsRedirection();
 
+            app.UseCors("AllowAllOrigins");
             app.UseAuthentication();
             app.UseAuthorization();
 
