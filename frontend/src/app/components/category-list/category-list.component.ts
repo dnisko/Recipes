@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { CategoryService } from '../services/category.service';
-import { Category } from '../models/category.model';
+import { CategoryService } from '../../services/category.service';
+import { Category } from '../../models/category.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({

@@ -4,9 +4,3 @@ export interface Category {
   name: string;
   recipes: any[]; // or Recipe[] if you have a Recipe interface
 }
-
-export interface ApiResponse {
-  success: boolean;
-  message: string[];
-  data: Category[];
-}

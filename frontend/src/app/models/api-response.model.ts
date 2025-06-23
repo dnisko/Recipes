@@ -1,5 +1,7 @@
-export interface ApiResponse<T> {
+import { Category } from "./category.interface";
+
+export interface ApiResponse {
   success: boolean;
   message: string[];
-  data: T;
+  data: Category[];
 }

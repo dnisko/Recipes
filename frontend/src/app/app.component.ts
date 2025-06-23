@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
  // Remove this if present
 import { CategoryService } from './services/category.service';
-import { Category } from './models/category.model';
+import { Category } from './models/category.interface';
 
 @Component({
   selector: 'app-root',

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApiResponse, Category } from '../models/category.model';
+import { ApiResponse, Category } from '../models/category.interface';
 
 @Injectable({
   providedIn: 'root'
