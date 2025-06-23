@@ -8,8 +8,8 @@ import { Category } from './models/category.interface';
   selector: 'app-root',
   standalone: true, // Critical for standalone apps
   imports: [CommonModule], // Add other modules as needed
-  templateUrl: './app.html',
-  styleUrls: ['./app.scss']
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   categories: Category[] = [];
