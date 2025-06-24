@@ -1,0 +1,12 @@
+<p>layout works!</p>
+<nav class="nav-bar">
+  <ul>
+    <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
+    <li><a routerLink="/categories" routerLinkActive="active">Category</a></li>
+    <li><a routerLink="/recipes" routerLinkActive="active">Recipe</a></li>
+    <li><a routerLink="/search" routerLinkActive="active">Search</a></li>
+  </ul>
+</nav>
+
+<!-- This is where routed pages will be rendered -->
+<router-outlet></router-outlet>

@@ -1,0 +1,28 @@
+.nav-bar {
+  background-color: #1976d2;  // blue primary color
+  padding: 1rem;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 2rem;
+
+    li {
+      a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+
+        &.active {
+          border-bottom: 2px solid white;
+        }
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+}

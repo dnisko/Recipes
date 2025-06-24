@@ -1,14 +1,16 @@
 import { Component, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatListModule } from '@angular/material/list';
 import { catchError, delay, retry, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { MatListModule } from '@angular/material/list';
+import { ApiResponse } from '../../../models/api-response.model';
+import { Category } from '../../../models/category.interface';
 
 @Component({
   selector: 'app-category-list',
@@ -19,7 +21,7 @@ import { MatListModule } from '@angular/material/list';
     MatProgressSpinnerModule,
     MatButtonModule,
     MatIconModule,
-    MatSnackBarModule,
+    //MatSnackBar,
     MatListModule
   ],
   templateUrl: './category-list.component.html',
@@ -29,8 +31,7 @@ export class CategoryListComponent {
   private http = inject(HttpClient);
   private snackBar = inject(MatSnackBar);
 
-  // State variables
-  categories: any[] = [];
+  categories: Category[] = [];
   loading = true;
   error: string | null = null;
   retryCount = 0;
@@ -43,17 +44,17 @@ export class CategoryListComponent {
     this.loading = true;
     this.error = null;
     
-    this.http.get<any>('http://localhost:5014/api/category/getAll')
+    this.http.get<ApiResponse<Category[]>>('http://localhost:5014/api/category/getAll')
       .pipe(
-        delay(500), // For demo purposes (remove in production)
-        retry(2), // Auto-retry twice on failure
+        delay(500),
+        retry(2),
         tap(() => this.retryCount = 0),
-        catchError((err) => {
+        catchError(err => {
           const errorMessage = err.message || 'Failed to load categories';
           this.error = errorMessage;
           this.loading = false;
           this.retryCount++;
-          this.showErrorSnackbar(errorMessage); // Now guaranteed to be string
+          this.showErrorSnackbar(errorMessage);
           return of(null);
         })
       )
@@ -62,9 +63,9 @@ export class CategoryListComponent {
           if (response?.success) {
             this.categories = response.data;
           } else if (response === null) {
-            // Error already handled
+            // error handled
           } else {
-            this.error = 'Invalid response format';
+            this.error = 'Unexpected response';
             this.showErrorSnackbar(this.error);
           }
           this.loading = false;

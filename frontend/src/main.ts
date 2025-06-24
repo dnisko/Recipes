@@ -1,14 +1,17 @@
 import { bootstrapApplication } from '@angular/platform-browser';
+//import { LayoutComponent } from './app/components/layout/layout.component';
 import { AppComponent } from './app/app.component';
 import { provideHttpClient } from '@angular/common/http'; // Add this
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { routes } from './app/app.routes';
+import { provideRouter } from '@angular/router';
+//import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { appConfig } from './app/app.config';
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideHttpClient(), // Modern HTTP client setup
-    ...appConfig.providers,
-    provideAnimationsAsync()
-    // Other providers...
-  ]
-});
+// bootstrapApplication(AppComponent, {
+//   providers: [
+//     provideRouter(routes),
+//     provideHttpClient()
+//   ]
+// });
+
+bootstrapApplication(AppComponent, appConfig);
