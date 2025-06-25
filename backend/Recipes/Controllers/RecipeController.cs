@@ -1,9 +1,10 @@
 ﻿using Common.Exceptions.CategoryException;
+using Common.Exceptions.IngredientException;
 using Common.Exceptions.RecipeException;
 using Common.Exceptions.ServerException;
+using Common.Exceptions.TagException;
 using DTOs.RecipeDto;
 using Microsoft.AspNetCore.Mvc;
-using Services.Implementations;
 using Services.Interfaces;
 
 namespace Recipes.Controllers
@@ -91,45 +92,11 @@ namespace Recipes.Controllers
             }
         }
 
-        /*[HttpGet("getWithTags")]
-        public async Task<IActionResult> GetRecipesWithTags()
-        {
-            try
-            {
-                var response = await _recipeService.GetRecipesWithTagsAsync();
-                return Response(response);
-            }
-            catch (RecipeDataException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (InternalServerErrorException ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }*/
-
-        /*[HttpGet("getDetails/{recipeId}")]
-        public async Task<IActionResult> GetRecipeDetails(int recipeId)
-        {
-            try
-            {
-                var response = await _recipeService.GetRecipeDetailsAsync(recipeId);
-                return Response(response);
-            }
-            catch (RecipeDataException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (InternalServerErrorException ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }*/
-
         [HttpPost("add")]
-        public async Task<IActionResult> AddRecipe([FromBody] RecipeDto recipe)
+        public async Task<IActionResult> AddRecipe([FromBody] AddRecipeDto recipe)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             try
             {
                 var response = await _recipeService.AddRecipeAsync(recipe);
@@ -146,8 +113,10 @@ namespace Recipes.Controllers
         }
 
         [HttpPut("update")]
-        public async Task<IActionResult> UpdateRecipe([FromBody] RecipeDto recipe)
+        public async Task<IActionResult> UpdateRecipe([FromBody] UpdateRecipeDto recipe)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             try
             {
                 var response = await _recipeService.UpdateRecipeAsync(recipe);
@@ -190,7 +159,7 @@ namespace Recipes.Controllers
                 var response = await _recipeService.GetIngredientsByRecipe(recipeId);
                 return Response(response);
             }
-            catch (CategoryDataException ex)
+            catch (IngredientDataException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -209,7 +178,7 @@ namespace Recipes.Controllers
                 var response = await _recipeService.GetPopularTagsAsync();
                 return Response(response);
             }
-            catch (CategoryDataException ex)
+            catch (TagDataException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -226,7 +195,7 @@ namespace Recipes.Controllers
                 var response = await _recipeService.GetTagsByARecipeAsync(id);
                 return Response(response);
             }
-            catch (CategoryDataException ex)
+            catch (TagDataException ex)
             {
                 return BadRequest(ex.Message);
             }

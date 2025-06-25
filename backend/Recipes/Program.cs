@@ -50,7 +50,9 @@ namespace Recipes
             //builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
-
+            Console.WriteLine("========================================Adding data=================================");
+            app.Services.EnsureSeeded();
+            Console.WriteLine("========================================Data Added=================================");
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

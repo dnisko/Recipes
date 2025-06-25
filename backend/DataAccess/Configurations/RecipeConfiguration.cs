@@ -14,7 +14,7 @@ namespace DataAccess.Configurations
             //        j => j.ToTable("RecipeTags"));
 
             //builder.HasIndex(r => r.Name).IsUnique();
-            builder.HasMany(r => r.Tags)
+            //builder.HasMany(r => r.Tags)
                 //.WithMany(t => t.Recipes)
                 //.UsingEntity<RecipeTag>(
                 //    j => j.ToTable("RecipeTags")

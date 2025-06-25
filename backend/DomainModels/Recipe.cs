@@ -27,7 +27,7 @@ namespace DomainModels
         ////public ICollection<Image> Images { get; set; } = new List<Image>();
         //public ICollection<Tag> Tags { get; set; } = new List<Tag>();
         
-        public ICollection<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
-        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
+        public ICollection<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();
+        public ICollection<RecipeTag> RecipeTags { get; set; } = new List<RecipeTag>();
     }
 }

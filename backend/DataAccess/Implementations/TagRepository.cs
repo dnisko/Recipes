@@ -15,16 +15,17 @@ namespace DataAccess.Implementations
         public async Task<IEnumerable<Tag>> GetPopularTags(int top = 10)
         {
             return await _context.Tags
-                .OrderByDescending(t => t.Recipes.Count)
+                .OrderByDescending(t => t.RecipeTags.Count)
                 .Take(top)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<Tag>> GetTagsByRecipe(int recipeId)
         {
-            return await _context.Tags
-                .Include(t => t.Recipes)
-                .Where(t => t.Recipes.Any(r => r.Id == recipeId))
+            return await _context.RecipeTags
+                .Where(rt => rt.RecipeId == recipeId)
+                .Include(rt => rt.Tag)
+                .Select(rt => rt.Tag)
                 .ToListAsync();
 
         }

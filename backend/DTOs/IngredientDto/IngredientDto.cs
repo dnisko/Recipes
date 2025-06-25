@@ -13,6 +13,6 @@ namespace DTOs.IngredientDto
         [Required]
         [MaxLength(20)]
         public string Unit { get; set; }
-        public int RecipeId { get; set; }
+        //public int RecipeId { get; set; }
     }
 }

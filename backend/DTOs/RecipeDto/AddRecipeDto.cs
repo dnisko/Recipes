@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DTOs.IngredientDto;
+using DTOs.TagDto;
+using System.ComponentModel.DataAnnotations;
 
 namespace DTOs.RecipeDto
 {
@@ -16,7 +18,7 @@ namespace DTOs.RecipeDto
         public int CategoryId { get; set; }
 
         // Initialize collections directly
-        public List<IngredientDto.IngredientDto> Ingredients { get; set; } = new();
-        public List<TagDto.TagDto> Tags { get; set; } = new();
+        public List<RecipeIngredientDto> Ingredients { get; set; } = new();
+        public List<RecipeTagDto> Tags { get; set; } = new();
     }
 }

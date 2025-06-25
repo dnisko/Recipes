@@ -1,1 +1,28 @@
-<p>recipe works!</p>
+<section class="recipe-container">
+  <h2>All Recipes</h2>
+
+  <div *ngIf="loading" class="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading recipes...</p>
+  </div>
+
+  <div *ngIf="error && !loading" class="error">
+    <p>Error: {{ error }}</p>
+  </div>
+
+  <div *ngIf="!loading && recipes.length === 0" class="empty">
+    <p>No recipes found.</p>
+  </div>
+
+  <div *ngIf="!loading && recipes.length > 0" class="recipes">
+    <mat-card *ngFor="let recipe of recipes" class="recipe-card">
+      <mat-card-title>{{ recipe.name }}</mat-card-title>
+      <mat-card-content>
+        <p>{{ recipe.description }}</p>
+        <p><strong>Prep:</strong> {{ recipe.prepTime }} | <strong>Cook:</strong> {{ recipe.cookTime }}</p>
+        <p><strong>Servings:</strong> {{ recipe.servings }}</p>
+        <p><strong>Difficulty:</strong> {{ recipe.difficulty }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>

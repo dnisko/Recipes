@@ -1,9 +1,5 @@
-import { Injectable } from '@angular/core';
-
-@Injectable({
-  providedIn: 'root'
-})
-export class Ingredient {
-
-  constructor() { }
+export interface Ingredient {
+  id: number;
+  name: string;
+  quantity: string;
 }

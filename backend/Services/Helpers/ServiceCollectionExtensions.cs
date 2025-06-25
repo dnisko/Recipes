@@ -28,6 +28,17 @@ namespace Services.Helpers
             return services;
         }
 
+        public static void EnsureSeeded(this IServiceProvider services)
+        {
+            using var scope = services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<RecipeDbContext>();
+
+            context.Database.EnsureDeleted(); // ⚠️ For development only
+            context.Database.Migrate();       // Or EnsureCreated();
+
+            DataSeeder.SeedData(context);
+        }
+
         public static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

@@ -9,7 +9,7 @@ export interface Recipe {
     prepTime?: string;
     cookTime?: string;
     servings: number;
-    difficulty: number;
+    difficulty: number;// 0 = Easy, 1 = Medium, 2 = Hard
     categoryId: number;
     ingredients: Ingredient[];
     tags: Tag[];

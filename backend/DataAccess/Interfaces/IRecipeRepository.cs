@@ -11,5 +11,7 @@ namespace DataAccess.Interfaces
         Task<Recipe> GetRecipeDetails(int recipeId);
 
         //Task<Recipe> GetRecipeWithIngredientsAsTask(int recipeId);
+        Task AddRecipeWithRelationsAsync(Recipe recipe);
+        Task UpdateRecipeWithRelationsAsync(Recipe recipe);
     }
 }

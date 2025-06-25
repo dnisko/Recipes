@@ -150,10 +150,22 @@ namespace Services.Implementations
             }
         }*/
 
-        public async Task<CustomResponse> AddRecipeAsync(RecipeDto recipe)
+        public async Task<CustomResponse> AddRecipeAsync1(RecipeDto recipe)
         {
             try
             {
+                //var recipeEntity = _mapper.Map<Recipe>(recipe);
+                recipe.Ingredients = recipe.Ingredients.Select(i => new RecipeIngredientDto()
+                {
+                    IngredientId = i.IngredientId,
+                    Quantity = i.Quantity,
+                    Unit = i.Unit
+                }).ToList();
+
+                recipe.Tags = recipe.Tags.Select(t => new RecipeTagDto
+                {
+                    TagId = t.TagId
+                }).ToList();
                 var recipeEntity = _mapper.Map<Recipe>(recipe);
                 await _recipeRepository.AddAsync(recipeEntity);
                 //await _recipeRepository.SaveChangesAsync();
@@ -165,23 +177,136 @@ namespace Services.Implementations
                 throw new RecipeDataException($"Error while adding recipe: {ex.Message}");
             }
         }
-
-        public async Task<CustomResponse> UpdateRecipeAsync(RecipeDto recipe)
+        public async Task<CustomResponse> AddRecipeAsync2(RecipeDto recipeDto)
         {
             try
             {
-                var recipeEntity = _mapper.Map<Recipe>(recipe);
-                await _recipeRepository.UpdateAsync(recipeEntity);
-                //await _recipeRepository.SaveChangesAsync();
+                var recipe = _mapper.Map<Recipe>(recipeDto);
+
+                recipe.RecipeIngredients = recipeDto.Ingredients.Select(i => new RecipeIngredient
+                {
+                    IngredientId = i.IngredientId,
+                    Quantity = i.Quantity,
+                    Unit = i.Unit
+                }).ToList();
+
+                recipe.RecipeTags = recipeDto.Tags.Select(t => new RecipeTag
+                {
+                    TagId = t.TagId
+                }).ToList();
+
+                await _recipeRepository.AddAsync(recipe);
+                var mapped = _mapper.Map<RecipeDto>(recipe);
+                return CustomResponse<RecipeDto>.Success(mapped);
+            }
+            catch (Exception ex)
+            {
+                throw new RecipeDataException($"Error while adding recipe: {ex.Message}");
+            }
+        }
+        public async Task<CustomResponse> AddRecipeAsync(AddRecipeDto addRecipeDto)
+        {
+            try
+            {
+                // Map AddRecipeDto to Recipe domain entity, including join entities
+                var recipeEntity = _mapper.Map<Recipe>(addRecipeDto);
+
+                // Map Ingredients from DTO to RecipeIngredients join entities
+                recipeEntity.RecipeIngredients = addRecipeDto.Ingredients.Select(i => new RecipeIngredient
+                {
+                    IngredientId = i.IngredientId,
+                    Quantity = i.Quantity,
+                    Unit = i.Unit
+                }).ToList();
+
+                // Map Tags from DTO to RecipeTags join entities
+                recipeEntity.RecipeTags = addRecipeDto.Tags.Select(t => new RecipeTag
+                {
+                    TagId = t.TagId
+                }).ToList();
+
+                await _recipeRepository.AddRecipeWithRelationsAsync(recipeEntity);
+
                 var recipeDto = _mapper.Map<RecipeDto>(recipeEntity);
                 return CustomResponse<RecipeDto>.Success(recipeDto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding recipe");
+                return CustomResponse<RecipeDto>.Fail("An error occurred while adding the recipe.");
+            }
+        }
+
+        public async Task<CustomResponse> UpdateRecipeAsync1(RecipeDto recipeDto)
+        {
+            try
+            {
+                var recipe = await _recipeRepository.GetRecipeDetails(recipeDto.Id);
+                if (recipe == null)
+                {
+                    _logger.LogError($"Recipe with id {recipeDto.Id} not found.");
+                    return CustomResponse.Fail($"Recipe with id {recipeDto.Id} not found.");
+                }
+                
+                _mapper.Map(recipeDto, recipe);
+                
+                recipe.RecipeIngredients = recipeDto.Ingredients.Select(i => new RecipeIngredient
+                {
+                    RecipeId = recipe.Id,
+                    IngredientId = i.IngredientId,
+                    Quantity = i.Quantity,
+                    Unit = i.Unit
+                }).ToList();
+
+                recipe.RecipeTags = recipeDto.Tags.Select(t => new RecipeTag
+                {
+                    RecipeId = recipe.Id,
+                    TagId = t.TagId
+                }).ToList();
+
+                await _recipeRepository.UpdateAsync(recipe);
+                //await _recipeRepository.SaveChangesAsync();
+                //var recipeDto = _mapper.Map<RecipeDto>(recipeEntity);
+                var mapped = _mapper.Map<RecipeDto>(recipe);
+                return CustomResponse<RecipeDto>.Success(mapped);
             }
             catch (RecipeDataException ex)
             {
                 throw new RecipeDataException($"Error while getting the categories: {ex.Message}");
             }
         }
+        public async Task<CustomResponse> UpdateRecipeAsync(UpdateRecipeDto updateRecipeDto)
+        {
+            try
+            {
+                // Map UpdateRecipeDto to Recipe domain entity, including join entities
+                var recipeEntity = _mapper.Map<Recipe>(updateRecipeDto);
 
+                // Map Ingredients from DTO to RecipeIngredients join entities
+                recipeEntity.RecipeIngredients = updateRecipeDto.Ingredients.Select(i => new RecipeIngredient
+                {
+                    IngredientId = i.IngredientId,
+                    Quantity = i.Quantity,
+                    Unit = i.Unit
+                }).ToList();
+
+                // Map Tags from DTO to RecipeTags join entities
+                recipeEntity.RecipeTags = updateRecipeDto.Tags.Select(t => new RecipeTag
+                {
+                    TagId = t.TagId
+                }).ToList();
+
+                await _recipeRepository.UpdateRecipeWithRelationsAsync(recipeEntity);
+
+                var recipeDto = _mapper.Map<RecipeDto>(recipeEntity);
+                return CustomResponse<RecipeDto>.Success(recipeDto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating recipe");
+                return CustomResponse<RecipeDto>.Fail("An error occurred while updating the recipe.");
+            }
+        }
         public async Task<CustomResponse> DeleteRecipeAsync(int id)
         {
             try

@@ -1,0 +1,19 @@
+.recipe-container {
+  padding: 1rem;
+
+  .loading, .error {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .recipes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .recipe-card {
+    padding: 1rem;
+  }
+}

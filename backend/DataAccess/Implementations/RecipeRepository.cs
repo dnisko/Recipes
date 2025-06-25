@@ -15,7 +15,8 @@ namespace DataAccess.Implementations
         public async Task<IEnumerable<Recipe>> GetRecipesWithTags()
         {
             return await _context.Recipes
-                .Include(x => x.Tags)
+                .Include(x => x.RecipeTags)
+                .ThenInclude(rt => rt.Tag )
                 .ToListAsync();
         }
 
@@ -23,6 +24,10 @@ namespace DataAccess.Implementations
         {
             return await _context.Recipes
                 .Where(x => x.CategoryId == categoryId)
+                .Include(r => r.RecipeIngredients)
+                .ThenInclude(ri => ri.Ingredient)
+                .Include(r => r.RecipeTags)
+                .ThenInclude(rt => rt.Tag)
                 .ToListAsync();
         }
 
@@ -31,15 +36,58 @@ namespace DataAccess.Implementations
             return await _context.Recipes
                 .Where(x => x.Name.ToLower().Contains(keyword.ToLower()) ||
                             x.Description.ToLower().Contains(keyword.ToLower()))
+                .Include(r => r.RecipeIngredients)
+                .ThenInclude(ri => ri.Ingredient)
+                .Include(r => r.RecipeTags)
+                .ThenInclude(rt => rt.Tag)
                 .ToListAsync();
         }
 
-        public async Task<Recipe> GetRecipeDetails(int recipeId)
+        public async Task<Recipe?> GetRecipeDetails(int recipeId)
         {
             return await _context.Recipes
-                .Include(r => r.Ingredients)
-                .Include(r => r.Tags)
+                //.Where(r => r.Id == recipeId)
+                .Include(r => r.RecipeIngredients)
+                .ThenInclude(ri => ri.Ingredient)
+                .Include(r => r.RecipeTags)
+                .ThenInclude(rt => rt.Tag)
                 .FirstOrDefaultAsync(r => r.Id == recipeId);
+        }
+
+        public async Task AddRecipeWithRelationsAsync(Recipe recipe)
+        {
+            _context.Recipes.Add(recipe);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateRecipeWithRelationsAsync(Recipe recipe)
+        {
+            var existingRecipe = await _context.Recipes
+                .Include(r => r.RecipeIngredients)
+                .Include(r => r.RecipeTags)
+                .FirstOrDefaultAsync(r => r.Id == recipe.Id);
+
+            if (existingRecipe == null)
+                throw new KeyNotFoundException($"Recipe with Id {recipe.Id} not found.");
+
+            // Update simple properties
+            _context.Entry(existingRecipe).CurrentValues.SetValues(recipe);
+
+            // Synchronize Ingredients (RecipeIngredients)
+            existingRecipe.RecipeIngredients.Clear();
+            foreach (var ri in recipe.RecipeIngredients)
+            {
+                existingRecipe.RecipeIngredients.Add(ri);
+            }
+
+            // Synchronize Tags (RecipeTags)
+            existingRecipe.RecipeTags.Clear();
+            foreach (var rt in recipe.RecipeTags)
+            {
+                existingRecipe.RecipeTags.Add(rt);
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

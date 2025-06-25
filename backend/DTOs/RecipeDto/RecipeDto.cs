@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using DomainModels;
+﻿using DTOs.IngredientDto;
+using DTOs.TagDto;
+using System.ComponentModel.DataAnnotations;
 
 namespace DTOs.RecipeDto
 {
@@ -21,7 +22,7 @@ namespace DTOs.RecipeDto
         public int CategoryId { get; set; }
 
         // Change to mutable lists for AutoMapper compatibility
-        public List<IngredientDto.IngredientDto> Ingredients { get; set; } = new();
-        public List<TagDto.TagDto> Tags { get; set; } = new();
+        public List<RecipeIngredientDto> Ingredients { get; set; } = new();
+        public List<RecipeTagDto> Tags { get; set; } = new();
     }
 }

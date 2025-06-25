@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DTOs.IngredientDto;
+using DTOs.TagDto;
+using System.ComponentModel.DataAnnotations;
 
 namespace DTOs.RecipeDto
 {
@@ -19,7 +21,7 @@ namespace DTOs.RecipeDto
         public int Difficulty { get; set; }
         public int CategoryId { get; set; }
 
-        public List<IngredientDto.IngredientDto> Ingredients { get; set; } = new();
-        public List<TagDto.TagDto> Tags { get; set; } = new();
+        public List<RecipeIngredientDto> Ingredients { get; set; } = new();
+        public List<RecipeTagDto> Tags { get; set; } = new();
     }
 }

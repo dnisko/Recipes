@@ -6,7 +6,7 @@ namespace DomainModels
     {
         [Required]
         [MaxLength(20)]
-        public string Name { get; set; }
-        public ICollection<Recipe> Recipes { get; set; } = new List<Recipe>();
+        public string Name { get; set; } = null!;
+        public ICollection<RecipeTag> RecipeTags { get; set; } = new List<RecipeTag>();
     }
 }

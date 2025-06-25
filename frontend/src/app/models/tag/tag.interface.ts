@@ -1,9 +1,4 @@
-import { Injectable } from '@angular/core';
-
-@Injectable({
-  providedIn: 'root'
-})
-export class Tag {
-
-  constructor() { }
+export interface Tag {
+  id: number;
+  name: string;
 }

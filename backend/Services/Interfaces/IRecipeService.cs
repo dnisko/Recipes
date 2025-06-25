@@ -14,8 +14,8 @@ namespace Services.Interfaces
         //Task<CustomResponse<List<RecipeDto>>> GetRecipesWithTagsAsync();
         //Task<CustomResponse<List<RecipeDto>>> GetRecipeDetailsAsync(int recipeId);
 
-        Task<CustomResponse> AddRecipeAsync(RecipeDto recipe);
-        Task<CustomResponse> UpdateRecipeAsync(RecipeDto recipe);
+        Task<CustomResponse> AddRecipeAsync(AddRecipeDto recipe);
+        Task<CustomResponse> UpdateRecipeAsync(UpdateRecipeDto recipe);
         Task<CustomResponse> DeleteRecipeAsync(int id);
 
         //Ingredient

@@ -14,7 +14,11 @@ namespace DataAccess.Implementations
 
         public async Task<IEnumerable<Ingredient>> GetIngredientsByRecipe(int recipeId)
         {
-            return await _context.Ingredients.Where(x => x.RecipeId == recipeId).ToListAsync();
+            return await _context.RecipeIngredients
+                .Where(ri => ri.RecipeId == recipeId)
+                .Include(ri => ri.Ingredient)
+                .Select(ri => ri.Ingredient)
+                .ToListAsync();
         }
     }
 }
