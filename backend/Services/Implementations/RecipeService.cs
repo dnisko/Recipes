@@ -5,6 +5,7 @@ using Common.Exceptions.TagException;
 using Common.Responses;
 using DataAccess.Interfaces;
 using DomainModels;
+using DTOs;
 using DTOs.IngredientDto;
 using DTOs.RecipeDto;
 using DTOs.TagDto;
@@ -49,8 +50,33 @@ namespace Services.Implementations
             }
             catch (RecipeDataException ex)
             {
-                throw new RecipeDataException($"Error while getting the categories: {ex.Message}");
+                throw new RecipeDataException($"Error while getting the recipes: {ex.Message}");
             }
+        }
+
+        public async Task<CustomResponse<PaginatedResult<RecipeDto>>> GetAllRecipesDetailsAsync(int pageNumber, int pageSize)
+        {
+            var pagedRecipes = await _recipeRepository.GetAllRecipesDetails1(pageNumber, pageSize);
+
+            if (!pagedRecipes.Items.Any())
+                return CustomResponse<PaginatedResult<RecipeDto>>.Fail("No recipes found.");
+
+            var mapped = _mapper.Map<List<RecipeDto>>(pagedRecipes.Items);
+
+            var result = new PaginatedResult<RecipeDto>(mapped, pagedRecipes.TotalRecords, pageNumber, pageSize);
+            return CustomResponse<PaginatedResult<RecipeDto>>.Success(result);
+        }
+        public async Task<CustomResponse<PaginatedResult<RecipeDto>>> GetAllRecipesAsync(RecipePaginationParams paginationParams)
+        {
+            var paged = await _recipeRepository.GetAllRecipesAsync(paginationParams);
+
+            if (!paged.Items.Any())
+                return CustomResponse<PaginatedResult<RecipeDto>>.Fail("No recipes found.");
+
+            var mapped = _mapper.Map<List<RecipeDto>>(paged.Items);
+            var result = new PaginatedResult<RecipeDto>(mapped, paged.TotalRecords, paginationParams.PageNumber, paginationParams.PageSize);
+
+            return CustomResponse<PaginatedResult<RecipeDto>>.Success(result);
         }
 
         public async Task<CustomResponse<RecipeDto>> GetRecipeByIdAsync(int id)

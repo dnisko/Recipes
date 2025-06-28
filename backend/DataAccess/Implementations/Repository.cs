@@ -1,4 +1,5 @@
-﻿using DataAccess.Interfaces;
+﻿using Common.Responses;
+using DataAccess.Interfaces;
 using DomainModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -107,6 +108,16 @@ namespace DataAccess.Implementations
                 //throw new InvalidOperationException(ex.Message);
                 throw;
             }
+        }
+
+        public async Task<PaginatedResult<T>> GetPagedAsync(IQueryable<T> query, int pageNumber, int pageSize)
+        {
+            var totalRecords = await query.CountAsync();
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            return new PaginatedResult<T>(items, totalRecords, pageNumber, pageSize);
         }
     }
 }

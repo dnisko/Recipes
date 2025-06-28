@@ -1,5 +1,8 @@
-﻿using DataAccess.Interfaces;
+﻿using Common.Helpers;
+using Common.Responses;
+using DataAccess.Interfaces;
 using DomainModels;
+using DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Implementations
@@ -12,6 +15,26 @@ namespace DataAccess.Implementations
             _context = context;
         }
 
+        public async Task<PaginatedResult<Recipe>> GetAllRecipesDetails1(int pageNumber, int pageSize)
+        {
+            var result = _context.Recipes
+                .Include(r => r.RecipeIngredients)
+                .ThenInclude(ri => ri.Ingredient)
+                .Include(r => r.RecipeTags)
+                .ThenInclude(rt => rt.Tag)
+                .AsQueryable();
+            //var test = await GetPagedAsync(result, pageNumber, pageSize);
+            return await GetPagedAsync(result, pageNumber, pageSize);
+        }
+        public async Task<PaginatedResult<Recipe>> GetAllRecipesAsync(RecipePaginationParams paginationParams)
+        {
+            var query = _context.Recipes
+                .Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient)
+                .Include(r => r.RecipeTags).ThenInclude(rt => rt.Tag)
+                .AsQueryable();
+
+            return await PaginationHelper.ApplyPaginationAsync(query, paginationParams);
+        }
         public async Task<IEnumerable<Recipe>> GetRecipesWithTags()
         {
             return await _context.Recipes

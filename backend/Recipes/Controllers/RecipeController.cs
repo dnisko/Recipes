@@ -1,8 +1,9 @@
-﻿using Common.Exceptions.CategoryException;
-using Common.Exceptions.IngredientException;
+﻿using Common.Exceptions.IngredientException;
 using Common.Exceptions.RecipeException;
 using Common.Exceptions.ServerException;
 using Common.Exceptions.TagException;
+using Common.Responses;
+using DTOs;
 using DTOs.RecipeDto;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
@@ -19,14 +20,19 @@ namespace Recipes.Controllers
         {
             _recipeService = recipeService;
         }
-
-        [HttpGet("getAll")]
-        public async Task<IActionResult> GetAllRecipes()
+        [HttpGet("getAllWithDetails")]
+        public async Task<IActionResult> GetAllRecipes([FromQuery] RecipePaginationParams paginationParams)
+        {
+            var response = await _recipeService.GetAllRecipesAsync(paginationParams);
+            return Response(response);
+        }
+        [HttpGet("getAllWithDetails1")]
+        public async Task<IActionResult> GetAllRecipesDetails(int pageNumber = 1, int pageSize = 10)
         {
             try
             {
-                var response = await _recipeService.GetAllRecipesAsync();
-                return Response(response);
+                var response = await _recipeService.GetAllRecipesDetailsAsync(pageNumber, pageSize);
+                return Response<PaginatedResult<RecipeDto>>(response);
             }
             catch (RecipeDataException ex)
             {

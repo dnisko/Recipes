@@ -115,6 +115,18 @@
             }
             return CustomResponse<List<T>>.Success(data.ToList());
         }
+
+        public static CustomResponse<PaginatedResult<T>> FromPagedResult<T>(
+            PaginatedResult<T> paginatedData,
+            string errorMessageIfEmpty = "No data found.")
+        {
+            if (paginatedData == null || !paginatedData.Items.Any())
+            {
+                return CustomResponse<PaginatedResult<T>>.Fail(errorMessageIfEmpty);
+            }
+
+            return CustomResponse<PaginatedResult<T>>.Success(paginatedData);
+        }
     }
 
 }

@@ -1,4 +1,5 @@
 ﻿using Common.Responses;
+using DTOs;
 using DTOs.IngredientDto;
 using DTOs.RecipeDto;
 using DTOs.TagDto;
@@ -7,7 +8,9 @@ namespace Services.Interfaces
 {
     public interface IRecipeService
     {
-        Task<CustomResponse<List<RecipeDto>>> GetAllRecipesAsync();
+        Task<CustomResponse<PaginatedResult<RecipeDto>>> GetAllRecipesDetailsAsync(int pageNumber, int pageSize);
+        //Task<CustomResponse<List<RecipeDto>>> GetAllRecipesAsync1();
+        Task<CustomResponse<PaginatedResult<RecipeDto>>> GetAllRecipesAsync(RecipePaginationParams paginationParams);
         Task<CustomResponse<RecipeDto>> GetRecipeByIdAsync(int id);
         Task<CustomResponse<List<RecipeDto>>> GetRecipesByCategoryAsync(int categoryId);
         Task<CustomResponse<List<RecipeDto>>> SearchRecipesAsync(string keyword);
