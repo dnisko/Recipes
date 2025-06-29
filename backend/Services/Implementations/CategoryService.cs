@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using Common.Exceptions.CategoryException;
-using Common.Exceptions.RecipeException;
 using Common.Responses;
 using DataAccess.Interfaces;
 using DomainModels;
+using DTOs;
 using DTOs.CategoryDto;
+using DTOs.RecipeDto;
 using Microsoft.Extensions.Logging;
 using Services.Interfaces;
-using System.Collections.Generic;
 
 namespace Services.Implementations
 {
@@ -28,27 +28,22 @@ namespace Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<CustomResponse<List<CategoryDto>>> GetAllCategoriesAsync()
+        public async Task<CustomResponse<PaginatedResult<CategorySimpleDto>>> GetAllCategoriesAsync(PaginationParams paginationParams)
         {
             try
             {
-                //var categories = await _categoryRepository.GetAllAsync();
-                //if (categories == null || !categories.Any())
-                //{
-                //    _logger.LogError("No categories found.");
-                //    return new CustomResponse<List<CategoryDto>>($"No categories found.");
-                //}
-                //var categoriesDto = _mapper.Map<List<CategoryDto>>(categories);
-                //return new CustomResponse<List<CategoryDto>>(categoriesDto);
-                var categories = await _categoryRepository.GetAllAsync();
-                var response = CustomResponseFactory.FromList(categories, "No categories found.");
+                var categories = await _categoryRepository.GetPagedAsync(paginationParams);
 
-                if (!response.IsSuccessful)
+                if (!categories.Items.Any())
                 {
-                    _logger.LogError(response.Errors.FirstOrDefault() ?? "No categories found.");
+                    return CustomResponse<PaginatedResult<CategorySimpleDto>>.Fail("No categories found.");
                 }
-                var categoriesDto = _mapper.Map<CustomResponse<List<CategoryDto>>>(response);
-                return categoriesDto;
+
+                var mapped = _mapper.Map<List<CategorySimpleDto>>(categories.Items);
+                var result = new PaginatedResult<CategorySimpleDto>(mapped, categories.TotalRecords,
+                    paginationParams.PageNumber, paginationParams.PageSize);
+
+                return CustomResponse<PaginatedResult<CategorySimpleDto>>.Success(result);
             }
             catch (CategoryDataException ex)
             {
@@ -56,19 +51,22 @@ namespace Services.Implementations
             }
         }
 
-        public async Task<CustomResponse<List<CategoryDto>>> GetCategoriesWithTheirRecipesAsync()
+        public async Task<CustomResponse<PaginatedResult<CategoryDto>>> GetCategoriesWithTheirRecipesAsync(PaginationParams paginationParams)
         {
             try
             {
-                var categoriesWithRecipes = await _categoryRepository.GetCategoriesWithRecipesAsync();
-                //if (categoriesWithRecipes == null || !categoriesWithRecipes.Any())
-                //{
-                //    _logger.LogError("No categories with recipes found.");
-                //    return new CustomResponse<List<CategoryDto>>($"No categories with recipes found.");
-                //}
-                var response = CustomResponseFactory.FromList(categoriesWithRecipes, "No categories with recipes found.");
-                var categoriesWithRecipesDto = _mapper.Map<CustomResponse<List<CategoryDto>>>(response);
-                return categoriesWithRecipesDto;
+                var categories = await _categoryRepository.GetCategoriesWithRecipesAsync(paginationParams);
+
+                if (!categories.Items.Any())
+                {
+                    return CustomResponse<PaginatedResult<CategoryDto>>.Fail("No categories found.");
+                }
+
+                var mapped = _mapper.Map<List<CategoryDto>>(categories.Items);
+                var result = new PaginatedResult<CategoryDto>(mapped, categories.TotalRecords,
+                    paginationParams.PageNumber, paginationParams.PageSize);
+
+                return CustomResponse<PaginatedResult<CategoryDto>>.Success(result);
             }
             catch (CategoryDataException ex)
             {

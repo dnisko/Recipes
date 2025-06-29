@@ -11,13 +11,16 @@ namespace Common.Helpers
             IQueryable<T> query,
             PaginationParams baseParams)
         {
+            if (!string.IsNullOrWhiteSpace(baseParams.SearchKeyword) && typeof(T).GetProperty("Name") != null)
+            {
+                query = query.Where(x =>
+                    EF.Functions.Like(EF.Property<string>(x, "Name"), $"%{baseParams.SearchKeyword}%"));
+            }
+
+            // Filtering for Recipe specific properties
             if (baseParams is RecipePaginationParams recipeParams)
             {
-                if (!string.IsNullOrWhiteSpace(recipeParams.SearchKeyword) && typeof(T).GetProperty("Name") != null)
-                {
-                    query = query.Where(x =>
-                        EF.Functions.Like(EF.Property<string>(x, "Name"), $"%{recipeParams.SearchKeyword}%"));
-                }
+                
 
                 if (recipeParams.CategoryId.HasValue && typeof(T).GetProperty("CategoryId") != null)
                 {
@@ -46,6 +49,7 @@ namespace Common.Helpers
                 }
             }
 
+            // Pagination
             var totalRecords = await query.CountAsync();
             var items = await query
                 .Skip((baseParams.PageNumber - 1) * baseParams.PageSize)

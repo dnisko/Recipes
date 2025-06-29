@@ -1,5 +1,8 @@
-﻿using DataAccess.Interfaces;
+﻿using Common.Helpers;
+using Common.Responses;
+using DataAccess.Interfaces;
 using DomainModels;
+using DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Implementations
@@ -12,12 +15,17 @@ namespace DataAccess.Implementations
             _context = context;
         }
 
-        public async Task<IEnumerable<Category>> GetCategoriesWithRecipesAsync()
+        public async Task<PaginatedResult<Category>> GetCategoriesWithRecipesAsync(PaginationParams paginationParams)
         {
-            return await _context.Categories
-                .Where(c => c.Recipes.Any()) //for categories with at least one recipe
-                .Include(x => x.Recipes)
-                .ToListAsync();
+            var categories = _context.Categories
+                .Include(c => c.Recipes)
+                    .ThenInclude(r => r.RecipeIngredients)
+                    .ThenInclude(ri => ri.Ingredient)
+                .Include(c => c.Recipes)
+                    .ThenInclude(r => r.RecipeTags)
+                    .ThenInclude(rt => rt.Tag)
+                .AsQueryable();
+            return await PaginationHelper.ApplyPaginationAsync(categories, paginationParams);
         }
     }
 }

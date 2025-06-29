@@ -93,6 +93,8 @@ namespace Mappers
 
             CreateMap(typeof(CustomResponse<>), typeof(CustomResponse<>))
                 .ConvertUsing(typeof(CustomResponseTypeConverter<,>));
+
+            CreateMap<Category, CategorySimpleDto>().ReverseMap();
         }
     }
 }

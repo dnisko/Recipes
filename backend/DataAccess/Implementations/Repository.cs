@@ -1,6 +1,8 @@
-﻿using Common.Responses;
+﻿using Common.Helpers;
+using Common.Responses;
 using DataAccess.Interfaces;
 using DomainModels;
+using DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -110,14 +112,19 @@ namespace DataAccess.Implementations
             }
         }
 
-        public async Task<PaginatedResult<T>> GetPagedAsync(IQueryable<T> query, int pageNumber, int pageSize)
+        //public async Task<PaginatedResult<T>> GetPagedAsync(IQueryable<T> query, int pageNumber, int pageSize)
+        //{
+        //    var totalRecords = await query.CountAsync();
+        //    var items = await query
+        //        .Skip((pageNumber - 1) * pageSize)
+        //        .Take(pageSize)
+        //        .ToListAsync();
+        //    return new PaginatedResult<T>(items, totalRecords, pageNumber, pageSize);
+        //}
+
+        public async Task<PaginatedResult<T>> GetPagedAsync(PaginationParams paginationParams)
         {
-            var totalRecords = await query.CountAsync();
-            var items = await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-            return new PaginatedResult<T>(items, totalRecords, pageNumber, pageSize);
+            return await PaginationHelper.ApplyPaginationAsync(_table.AsQueryable(), paginationParams);
         }
     }
 }

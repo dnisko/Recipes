@@ -15,17 +15,6 @@ namespace DataAccess.Implementations
             _context = context;
         }
 
-        public async Task<PaginatedResult<Recipe>> GetAllRecipesDetails1(int pageNumber, int pageSize)
-        {
-            var result = _context.Recipes
-                .Include(r => r.RecipeIngredients)
-                .ThenInclude(ri => ri.Ingredient)
-                .Include(r => r.RecipeTags)
-                .ThenInclude(rt => rt.Tag)
-                .AsQueryable();
-            //var test = await GetPagedAsync(result, pageNumber, pageSize);
-            return await GetPagedAsync(result, pageNumber, pageSize);
-        }
         public async Task<PaginatedResult<Recipe>> GetAllRecipesAsync(RecipePaginationParams paginationParams)
         {
             var query = _context.Recipes
@@ -34,13 +23,6 @@ namespace DataAccess.Implementations
                 .AsQueryable();
 
             return await PaginationHelper.ApplyPaginationAsync(query, paginationParams);
-        }
-        public async Task<IEnumerable<Recipe>> GetRecipesWithTags()
-        {
-            return await _context.Recipes
-                .Include(x => x.RecipeTags)
-                .ThenInclude(rt => rt.Tag )
-                .ToListAsync();
         }
 
         public async Task<IEnumerable<Recipe>> GetRecipesByCategory(int categoryId)

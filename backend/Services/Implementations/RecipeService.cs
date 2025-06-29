@@ -34,38 +34,6 @@ namespace Services.Implementations
             _logger = logger;
             _mapper = mapper;
         }
-        public async Task<CustomResponse<List<RecipeDto>>> GetAllRecipesAsync()
-        {
-            try
-            {
-                var recipes = await _recipeRepository.GetAllAsync();
-                //if (recipes == null || !recipes.Any())
-                //{
-                //    _logger.LogError("No recipes found.");
-                //    return new CustomResponse<List<RecipeDto>>($"No recipes found.");
-                //}
-                var response = CustomResponseFactory.FromList(recipes, "No recipes found.");
-                var recipesDto = _mapper.Map<CustomResponse<List<RecipeDto>>>(response);
-                return recipesDto;
-            }
-            catch (RecipeDataException ex)
-            {
-                throw new RecipeDataException($"Error while getting the recipes: {ex.Message}");
-            }
-        }
-
-        public async Task<CustomResponse<PaginatedResult<RecipeDto>>> GetAllRecipesDetailsAsync(int pageNumber, int pageSize)
-        {
-            var pagedRecipes = await _recipeRepository.GetAllRecipesDetails1(pageNumber, pageSize);
-
-            if (!pagedRecipes.Items.Any())
-                return CustomResponse<PaginatedResult<RecipeDto>>.Fail("No recipes found.");
-
-            var mapped = _mapper.Map<List<RecipeDto>>(pagedRecipes.Items);
-
-            var result = new PaginatedResult<RecipeDto>(mapped, pagedRecipes.TotalRecords, pageNumber, pageSize);
-            return CustomResponse<PaginatedResult<RecipeDto>>.Success(result);
-        }
         public async Task<CustomResponse<PaginatedResult<RecipeDto>>> GetAllRecipesAsync(RecipePaginationParams paginationParams)
         {
             var paged = await _recipeRepository.GetAllRecipesAsync(paginationParams);
@@ -103,11 +71,6 @@ namespace Services.Implementations
             try
             {
                 var recipes = await _recipeRepository.GetRecipesByCategory(categoryId);
-                //if (recipes == null || !recipes.Any())
-                //{
-                //    _logger.LogError($"No recipes found for category with id {categoryId}.");
-                //    return new CustomResponse<List<RecipeDto>>($"No recipes found for category with id {categoryId}.");
-                //}
                 var response = CustomResponseFactory.FromList(recipes, $"No recipes found for category with id {categoryId}.");
                 var recipesDto = _mapper.Map<CustomResponse<List<RecipeDto>>>(response);
                 return recipesDto;
@@ -135,99 +98,6 @@ namespace Services.Implementations
             catch (RecipeDataException ex)
             {
                 throw new RecipeDataException($"Error while getting the categories: {ex.Message}");
-            }
-        }
-
-        /*public async Task<CustomResponse<List<RecipeDto>>> GetRecipesWithTagsAsync()
-        {
-            try
-            {
-                var recipes = await _recipeRepository.GetRecipesWithTags();
-                if (recipes == null || !recipes.Any())
-                {
-                    _logger.LogError($"No recipes found with tags.");
-                    return new CustomResponse<List<RecipeDto>>($"No recipes found with tags.");
-                }
-                var recipesDto = _mapper.Map<List<RecipeDto>>(recipes);
-                return new CustomResponse<List<RecipeDto>>(recipesDto);
-            }
-            catch (RecipeDataException ex)
-            {
-                throw new RecipeDataException($"Error while getting the categories: {ex.Message}");
-            }
-        }*/
-
-        /*public async Task<CustomResponse<List<RecipeDto>>> GetRecipeDetailsAsync(int recipeId)
-        {
-            try
-            {
-                var recipe = await _recipeRepository.GetRecipeDetails(recipeId);
-                if (recipe == null)
-                {
-                    _logger.LogError($"Recipe with id {recipeId} not found.");
-                    return new CustomResponse<List<RecipeDto>>($"Recipe with id {recipeId} not found.");
-                }
-                var recipeDto = _mapper.Map<List<RecipeDto>>(recipe);
-                return new CustomResponse<List<RecipeDto>>(recipeDto);
-            }
-            catch (RecipeDataException ex)
-            {
-                throw new RecipeDataException($"Error while getting the categories: {ex.Message}");
-            }
-        }*/
-
-        public async Task<CustomResponse> AddRecipeAsync1(RecipeDto recipe)
-        {
-            try
-            {
-                //var recipeEntity = _mapper.Map<Recipe>(recipe);
-                recipe.Ingredients = recipe.Ingredients.Select(i => new RecipeIngredientDto()
-                {
-                    IngredientId = i.IngredientId,
-                    Quantity = i.Quantity,
-                    Unit = i.Unit
-                }).ToList();
-
-                recipe.Tags = recipe.Tags.Select(t => new RecipeTagDto
-                {
-                    TagId = t.TagId
-                }).ToList();
-                var recipeEntity = _mapper.Map<Recipe>(recipe);
-                await _recipeRepository.AddAsync(recipeEntity);
-                //await _recipeRepository.SaveChangesAsync();
-                var recipeDto = _mapper.Map<RecipeDto>(recipeEntity);
-                return CustomResponse<RecipeDto>.Success(recipeDto);
-            }
-            catch (RecipeDataException ex)
-            {
-                throw new RecipeDataException($"Error while adding recipe: {ex.Message}");
-            }
-        }
-        public async Task<CustomResponse> AddRecipeAsync2(RecipeDto recipeDto)
-        {
-            try
-            {
-                var recipe = _mapper.Map<Recipe>(recipeDto);
-
-                recipe.RecipeIngredients = recipeDto.Ingredients.Select(i => new RecipeIngredient
-                {
-                    IngredientId = i.IngredientId,
-                    Quantity = i.Quantity,
-                    Unit = i.Unit
-                }).ToList();
-
-                recipe.RecipeTags = recipeDto.Tags.Select(t => new RecipeTag
-                {
-                    TagId = t.TagId
-                }).ToList();
-
-                await _recipeRepository.AddAsync(recipe);
-                var mapped = _mapper.Map<RecipeDto>(recipe);
-                return CustomResponse<RecipeDto>.Success(mapped);
-            }
-            catch (Exception ex)
-            {
-                throw new RecipeDataException($"Error while adding recipe: {ex.Message}");
             }
         }
         public async Task<CustomResponse> AddRecipeAsync(AddRecipeDto addRecipeDto)
@@ -260,45 +130,6 @@ namespace Services.Implementations
             {
                 _logger.LogError(ex, "Error adding recipe");
                 return CustomResponse<RecipeDto>.Fail("An error occurred while adding the recipe.");
-            }
-        }
-
-        public async Task<CustomResponse> UpdateRecipeAsync1(RecipeDto recipeDto)
-        {
-            try
-            {
-                var recipe = await _recipeRepository.GetRecipeDetails(recipeDto.Id);
-                if (recipe == null)
-                {
-                    _logger.LogError($"Recipe with id {recipeDto.Id} not found.");
-                    return CustomResponse.Fail($"Recipe with id {recipeDto.Id} not found.");
-                }
-                
-                _mapper.Map(recipeDto, recipe);
-                
-                recipe.RecipeIngredients = recipeDto.Ingredients.Select(i => new RecipeIngredient
-                {
-                    RecipeId = recipe.Id,
-                    IngredientId = i.IngredientId,
-                    Quantity = i.Quantity,
-                    Unit = i.Unit
-                }).ToList();
-
-                recipe.RecipeTags = recipeDto.Tags.Select(t => new RecipeTag
-                {
-                    RecipeId = recipe.Id,
-                    TagId = t.TagId
-                }).ToList();
-
-                await _recipeRepository.UpdateAsync(recipe);
-                //await _recipeRepository.SaveChangesAsync();
-                //var recipeDto = _mapper.Map<RecipeDto>(recipeEntity);
-                var mapped = _mapper.Map<RecipeDto>(recipe);
-                return CustomResponse<RecipeDto>.Success(mapped);
-            }
-            catch (RecipeDataException ex)
-            {
-                throw new RecipeDataException($"Error while getting the categories: {ex.Message}");
             }
         }
         public async Task<CustomResponse> UpdateRecipeAsync(UpdateRecipeDto updateRecipeDto)

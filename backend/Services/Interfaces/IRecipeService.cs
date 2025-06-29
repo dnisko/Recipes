@@ -8,15 +8,11 @@ namespace Services.Interfaces
 {
     public interface IRecipeService
     {
-        Task<CustomResponse<PaginatedResult<RecipeDto>>> GetAllRecipesDetailsAsync(int pageNumber, int pageSize);
-        //Task<CustomResponse<List<RecipeDto>>> GetAllRecipesAsync1();
+        //Task<CustomResponse<PaginatedResult<RecipeDto>>> GetAllRecipesDetailsAsync(int pageNumber, int pageSize);
         Task<CustomResponse<PaginatedResult<RecipeDto>>> GetAllRecipesAsync(RecipePaginationParams paginationParams);
         Task<CustomResponse<RecipeDto>> GetRecipeByIdAsync(int id);
         Task<CustomResponse<List<RecipeDto>>> GetRecipesByCategoryAsync(int categoryId);
         Task<CustomResponse<List<RecipeDto>>> SearchRecipesAsync(string keyword);
-        //Task<CustomResponse<List<RecipeDto>>> GetRecipesWithTagsAsync();
-        //Task<CustomResponse<List<RecipeDto>>> GetRecipeDetailsAsync(int recipeId);
-
         Task<CustomResponse> AddRecipeAsync(AddRecipeDto recipe);
         Task<CustomResponse> UpdateRecipeAsync(UpdateRecipeDto recipe);
         Task<CustomResponse> DeleteRecipeAsync(int id);

@@ -1,5 +1,6 @@
 ﻿using Common.Exceptions.CategoryException;
 using Common.Exceptions.ServerException;
+using DTOs;
 using DTOs.CategoryDto;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
@@ -15,13 +16,14 @@ namespace Recipes.Controllers
         {
             _categoryService = categoryService;
         }
-        [HttpGet("getAll")]
-        public async Task<IActionResult> GetAllCategories()
+        [HttpGet("getAllCategoriesAsync")]
+        public async Task<IActionResult> GetAllCategories([FromQuery] PaginationParams paginationParams)
         {
             try
             {
-                var response = await _categoryService.GetAllCategoriesAsync();
+                var response = await _categoryService.GetAllCategoriesAsync(paginationParams);
                 return Response(response);
+                //return BadRequest("not implemented");
             }
             catch (CategoryDataException ex)
             {
@@ -33,11 +35,11 @@ namespace Recipes.Controllers
             }
         }
         [HttpGet("GetCategoriesWithTheirRecipesAsync")]
-        public async Task<IActionResult> GetCategoriesWithTheirRecipesAsync()
+        public async Task<IActionResult> GetCategoriesWithTheirRecipesAsync([FromQuery] PaginationParams paginationParams)
         {
             try
             {
-                var response = await _categoryService.GetCategoriesWithTheirRecipesAsync();
+                var response = await _categoryService.GetCategoriesWithTheirRecipesAsync(paginationParams);
                 return Response(response);
             }
             catch (CategoryDataException ex)

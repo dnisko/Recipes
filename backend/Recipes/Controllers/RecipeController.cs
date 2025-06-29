@@ -23,16 +23,10 @@ namespace Recipes.Controllers
         [HttpGet("getAllWithDetails")]
         public async Task<IActionResult> GetAllRecipes([FromQuery] RecipePaginationParams paginationParams)
         {
-            var response = await _recipeService.GetAllRecipesAsync(paginationParams);
-            return Response(response);
-        }
-        [HttpGet("getAllWithDetails1")]
-        public async Task<IActionResult> GetAllRecipesDetails(int pageNumber = 1, int pageSize = 10)
-        {
             try
             {
-                var response = await _recipeService.GetAllRecipesDetailsAsync(pageNumber, pageSize);
-                return Response<PaginatedResult<RecipeDto>>(response);
+                var response = await _recipeService.GetAllRecipesAsync(paginationParams);
+                return Response(response);
             }
             catch (RecipeDataException ex)
             {

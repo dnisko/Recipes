@@ -1,5 +1,6 @@
 ﻿using Common.Responses;
 using DomainModels;
+using DTOs;
 
 namespace DataAccess.Interfaces
 {
@@ -10,9 +11,11 @@ namespace DataAccess.Interfaces
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);
-        Task<PaginatedResult<T>> GetPagedAsync(
-            IQueryable<T> query,
-            int pageNumber,
-            int pageSize);
+        //Task<PaginatedResult<T>> GetPagedAsync(
+        //    IQueryable<T> query,
+        //    int pageNumber,
+        //    int pageSize);
+
+        Task<PaginatedResult<T>> GetPagedAsync(PaginationParams paginationParams);
     }
 }

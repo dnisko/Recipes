@@ -1,9 +1,11 @@
-﻿using DomainModels;
+﻿using Common.Responses;
+using DomainModels;
+using DTOs;
 
 namespace DataAccess.Interfaces
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        Task<IEnumerable<Category>> GetCategoriesWithRecipesAsync();
+        Task<PaginatedResult<Category>> GetCategoriesWithRecipesAsync(PaginationParams paginationParams);
     }
 }
