@@ -11,6 +11,12 @@ namespace Common.Helpers
             IQueryable<T> query,
             PaginationParams baseParams)
         {
+
+            if (baseParams.Id.HasValue && typeof(T).GetProperty("Id") != null)
+            {
+                query = query.Where(x => EF.Property<int>(x, "Id") == baseParams.Id.Value);
+            }
+
             if (!string.IsNullOrWhiteSpace(baseParams.SearchKeyword) && typeof(T).GetProperty("Name") != null)
             {
                 query = query.Where(x =>
@@ -32,6 +38,23 @@ namespace Common.Helpers
                 {
                     query = query.Where(x =>
                         EF.Property<int>(x, "Difficulty") == recipeParams.Difficulty.Value);
+                }
+            }
+
+            if (baseParams is CategoryPaginationParams categoryParams)
+            {
+                if (categoryParams.HasRecipe.HasValue && typeof(T).GetProperty("Recipes") != null)
+                {
+                    if (categoryParams.HasRecipe.Value)
+                    {
+                        query = query.Where(x =>
+                            EF.Property<ICollection<object>>(x, "Recipes").Count > 0);
+                    }
+                    else
+                    {
+                        query = query.Where(x =>
+                            EF.Property<ICollection<object>>(x, "Recipes").Count == 0);
+                    }
                 }
             }
 

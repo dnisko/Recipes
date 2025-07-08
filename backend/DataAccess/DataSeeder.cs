@@ -6,6 +6,7 @@ namespace DataAccess
     {
         public static void SeedData(RecipeDbContext context)
         {
+            if (context.Categories.Any()) return;
             // Seed Categories
             var categories = new List<Category>
             {
@@ -85,17 +86,24 @@ namespace DataAccess
             var recipeIngredients = new List<RecipeIngredient>
             {
                 // Pancakes ingredients
-                new RecipeIngredient { RecipeId = recipes[0].Id, IngredientId = ingredients.First(i => i.Name == "Eggs").Id },
-                new RecipeIngredient { RecipeId = recipes[0].Id, IngredientId = ingredients.First(i => i.Name == "Flour").Id },
-                new RecipeIngredient { RecipeId = recipes[0].Id, IngredientId = ingredients.First(i => i.Name == "Milk").Id },
+                new RecipeIngredient
+                    { RecipeId = recipes[0].Id, IngredientId = ingredients.First(i => i.Name == "Eggs").Id },
+                new RecipeIngredient
+                    { RecipeId = recipes[0].Id, IngredientId = ingredients.First(i => i.Name == "Flour").Id },
+                new RecipeIngredient
+                    { RecipeId = recipes[0].Id, IngredientId = ingredients.First(i => i.Name == "Milk").Id },
 
                 // Spaghetti Bolognese ingredients
-                new RecipeIngredient { RecipeId = recipes[1].Id, IngredientId = ingredients.First(i => i.Name == "Pasta").Id },
-                new RecipeIngredient { RecipeId = recipes[1].Id, IngredientId = ingredients.First(i => i.Name == "Tomato").Id },
+                new RecipeIngredient
+                    { RecipeId = recipes[1].Id, IngredientId = ingredients.First(i => i.Name == "Pasta").Id },
+                new RecipeIngredient
+                    { RecipeId = recipes[1].Id, IngredientId = ingredients.First(i => i.Name == "Tomato").Id },
 
                 // Pasta Marinara ingredients
-                new RecipeIngredient { RecipeId = recipes[2].Id, IngredientId = ingredients.First(i => i.Name == "Tomato").Id },
-                new RecipeIngredient { RecipeId = recipes[2].Id, IngredientId = ingredients.First(i => i.Name == "Pasta").Id },
+                new RecipeIngredient
+                    { RecipeId = recipes[2].Id, IngredientId = ingredients.First(i => i.Name == "Tomato").Id },
+                new RecipeIngredient
+                    { RecipeId = recipes[2].Id, IngredientId = ingredients.First(i => i.Name == "Pasta").Id },
             };
             context.RecipeIngredients.AddRange(recipeIngredients);
 

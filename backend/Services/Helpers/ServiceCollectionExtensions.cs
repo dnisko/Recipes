@@ -28,15 +28,36 @@ namespace Services.Helpers
             return services;
         }
 
+        //public static void EnsureSeeded(this IServiceProvider services)
+        //{
+        //    using var scope = services.CreateScope();
+        //    var context = scope.ServiceProvider.GetRequiredService<RecipeDbContext>();
+
+        //    context.Database.EnsureDeleted(); // ⚠️ For development only
+        //    context.Database.Migrate();       // Or EnsureCreated();
+
+        //    //if (!context.Categories.Any())
+        //    //{
+        //        DataSeeder.SeedData(context);
+        //    //}
+        //}
         public static void EnsureSeeded(this IServiceProvider services)
         {
             using var scope = services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<RecipeDbContext>();
 
-            context.Database.EnsureDeleted(); // ⚠️ For development only
-            context.Database.Migrate();       // Or EnsureCreated();
+            context.Database.Migrate();
 
-            DataSeeder.SeedData(context);
+            if (context.Categories.Any() && context.Ingredients.Any() && context.Recipes.Any() &&
+                context.Tags.Any())
+            {
+                Console.WriteLine("➡️ Database already seeded.");
+            }
+            else
+            {
+                Console.WriteLine("➡️ Seeding database...");
+                DataSeeder.SeedData(context);
+            }
         }
 
         public static IServiceCollection RegisterRepositories(this IServiceCollection services)

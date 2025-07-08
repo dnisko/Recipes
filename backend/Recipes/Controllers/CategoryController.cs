@@ -17,7 +17,7 @@ namespace Recipes.Controllers
             _categoryService = categoryService;
         }
         [HttpGet("getAllCategoriesAsync")]
-        public async Task<IActionResult> GetAllCategories([FromQuery] PaginationParams paginationParams)
+        public async Task<IActionResult> GetAllCategories([FromQuery] CategoryPaginationParams  paginationParams)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace Recipes.Controllers
             }
         }
         [HttpGet("GetCategoriesWithTheirRecipesAsync")]
-        public async Task<IActionResult> GetCategoriesWithTheirRecipesAsync([FromQuery] PaginationParams paginationParams)
+        public async Task<IActionResult> GetCategoriesWithTheirRecipesAsync([FromQuery] CategoryPaginationParams  paginationParams)
         {
             try
             {

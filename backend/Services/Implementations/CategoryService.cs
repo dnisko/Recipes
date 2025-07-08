@@ -28,7 +28,7 @@ namespace Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<CustomResponse<PaginatedResult<CategorySimpleDto>>> GetAllCategoriesAsync(PaginationParams paginationParams)
+        public async Task<CustomResponse<PaginatedResult<CategorySimpleDto>>> GetAllCategoriesAsync(CategoryPaginationParams paginationParams)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace Services.Implementations
             }
         }
 
-        public async Task<CustomResponse<PaginatedResult<CategoryDto>>> GetCategoriesWithTheirRecipesAsync(PaginationParams paginationParams)
+        public async Task<CustomResponse<PaginatedResult<CategoryDto>>> GetCategoriesWithTheirRecipesAsync(CategoryPaginationParams paginationParams)
         {
             try
             {
