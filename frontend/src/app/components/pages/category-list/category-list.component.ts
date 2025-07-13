@@ -1,86 +1,73 @@
-import { Component, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { PaginatedListComponent } from '../../shared/paginated-list/paginated-list.component';
+import { CategoryService } from '../../../services/category.service';
+import { Category } from '../../../models/interfaces/category.interface';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { catchError, delay, retry, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { ApiResponse } from '../../../models/api-response.model';
-import { Category } from '../../../models/category.interface';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-category-list',
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule,
+    PaginatedListComponent,
     MatProgressSpinnerModule,
     MatButtonModule,
     MatIconModule,
-    //MatSnackBar,
-    MatListModule
+    RouterModule
   ],
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.scss']
 })
-export class CategoryListComponent {
-  private http = inject(HttpClient);
-  private snackBar = inject(MatSnackBar);
+export class CategoryListComponent implements OnInit {
+  isLoading = false;
+  items: Category[] = [];
+  pagination = {
+    pageNumber: 1,
+    pageSize: 10,
+    totalRecords: 0
+  };
 
-  categories: Category[] = [];
-  loading = true;
-  error: string | null = null;
-  retryCount = 0;
+  constructor(
+    private categoryService: CategoryService,
+    private snackBar: MatSnackBar
+  ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadCategories();
   }
 
-  loadCategories() {
-    this.loading = true;
-    this.error = null;
-    
-    this.http.get<ApiResponse<Category[]>>('http://localhost:5014/api/category/getAll')
-      .pipe(
-        delay(500),
-        retry(2),
-        tap(() => this.retryCount = 0),
-        catchError(err => {
-          const errorMessage = err.message || 'Failed to load categories';
-          this.error = errorMessage;
-          this.loading = false;
-          this.retryCount++;
-          this.showErrorSnackbar(errorMessage);
-          return of(null);
-        })
-      )
-      .subscribe({
-        next: (response) => {
-          if (response?.success) {
-            this.categories = response.data;
-          } else if (response === null) {
-            // error handled
-          } else {
-            this.error = 'Unexpected response';
-            this.showErrorSnackbar(this.error);
-          }
-          this.loading = false;
-        }
-      });
-  }
-
-  private showErrorSnackbar(message: string) {
-    this.snackBar.open(message, 'Dismiss', {
-      duration: 5000,
-      panelClass: ['error-snackbar']
+  loadCategories(): void {
+    this.isLoading = true;
+    this.categoryService.getCategories(
+      this.pagination.pageNumber,
+      this.pagination.pageSize
+    ).subscribe({
+      next: (response) => {
+        this.items = response.data.items;
+        this.pagination.totalRecords = response.data.totalRecords;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.snackBar.open('Failed to load categories', 'Dismiss', {
+          duration: 3000
+        });
+        console.error('Error:', error);
+      }
     });
   }
 
-  retry() {
+  onPageChange(pageNumber: number): void {
+    this.pagination.pageNumber = pageNumber;
     this.loadCategories();
   }
+  confirmDelete(categoryId: number): void {
+  // Add your delete confirmation logic here
+  // You can use MatDialog for a confirmation modal
+}
 }

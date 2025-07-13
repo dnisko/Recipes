@@ -1,27 +1,26 @@
-// src/app/services/category.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
-import { Category } from '../models/category.interface';
-import { ApiResponse } from '../models/api-response.model';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+import { PaginatedResponse } from '../models/api-response.model';
+import { Category } from '../models/interfaces/category.interface';
 
 @Injectable({ providedIn: 'root' })
-
 export class CategoryService {
-  private apiUrl = 'http://localhost:5014/api/category';
+  private apiUrl = 'http://localhost:5014/api/Category/getAllCategoriesAsync';
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<Category[]> {
-    return this.http.get<ApiResponse<Category[]>>(`${this.apiUrl}/getAll`).pipe(
-      map(response => {
-        if (response.success)return response.data;
-        throw new Error(response.message.join(', '));
-      }),
-      catchError(error => {
-        console.error('Error fetching categories:', error);
-        return throwError(() => error);
+  getCategories(pageNumber: number, pageSize: number): Observable<PaginatedResponse<Category>> {
+    const params = new HttpParams()
+      .set('pageNumber', pageNumber.toString())
+      .set('pageSize', pageSize.toString());
+
+    console.log('Making request to:', this.apiUrl, 'with params:', params);
+
+    return this.http.get<PaginatedResponse<Category>>(this.apiUrl, { params }).pipe(
+      tap({
+        next: (response) => console.log('API Response:', response),
+        error: (error) => console.error('API Error:', error)
       })
     );
   }

@@ -14,3 +14,10 @@ export interface Recipe {
     ingredients: Ingredient[];
     tags: Tag[];
 }
+
+export interface PaginatedRecipeResponse {
+  items: Recipe[];
+  totalRecords: number;
+  pageNumber: number;
+  pageSize: number;
+}

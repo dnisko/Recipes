@@ -1,0 +1,57 @@
+<div class="paginated-container">
+  <!-- Search Box -->
+  <div class="search-box">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="Search..."
+      (keyup.enter)="onSearch()"
+    />
+    <button (click)="onSearch()">
+      <i class="search-icon">🔍</i> Search
+    </button>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="loading-indicator">
+    <mat-spinner diameter="40"></mat-spinner>
+    <span>Loading...</span>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && items.length === 0" class="empty-state">
+    No items found
+  </div>
+
+  <!-- Content Slot - To be filled by child components -->
+  <ng-content></ng-content>
+
+  <!-- Pagination Controls -->
+  <div *ngIf="!isLoading && pagination.totalRecords > 0" class="pagination-controls">
+    <button
+      [disabled]="pagination.pageNumber === 1"
+      (click)="onPageChange(pagination.pageNumber - 1)"
+    >
+      Previous
+    </button>
+    
+    <span class="page-info">
+      Page {{ pagination.pageNumber }} of {{ pagination.totalPages }}
+      ({{ pagination.totalRecords }} total items)
+    </span>
+    
+    <button
+      [disabled]="pagination.pageNumber >= (pagination.totalPages || 0)"
+      (click)="onPageChange(pagination.pageNumber + 1)"
+    >
+      Next
+    </button>
+
+    <select [(ngModel)]="pagination.pageSize" (change)="onPageChange(1)">
+      <option value="5">5 per page</option>
+      <option value="10">10 per page</option>
+      <option value="20">20 per page</option>
+      <option value="50">50 per page</option>
+    </select>
+  </div>
+</div>

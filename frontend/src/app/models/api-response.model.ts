@@ -1,12 +1,10 @@
-//import { Category } from "./category.interface";
-
-// export interface ApiResponse {
-//   success: boolean;
-//   message: string[];
-//   data: Category[];
-// }
-export interface ApiResponse<T> {
+export interface PaginatedResponse<T> {
   success: boolean;
   message: string[];
-  data: T;
+  data: {
+    items: T[];
+    totalRecords: number;
+    pageNumber: number;
+    pageSize: number;
+  };
 }
