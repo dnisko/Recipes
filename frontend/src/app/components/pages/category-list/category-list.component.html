@@ -1,51 +1,8 @@
-<app-paginated-list [isLoading]="isLoading" [pagination]="pagination">
-  <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading-state">
-    <mat-spinner diameter="50"></mat-spinner>
-  </div>
+<div *ngIf="loading">Loading categories...</div>
+<div *ngIf="error">{{ error }}</div>
 
-  <!-- Categories Table -->
-  <table *ngIf="!isLoading && items.length > 0" class="category-table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let category of items">
-        <td>{{ category.id }}</td>
-        <td>{{ category.name }}</td>
-        <td class="actions">
-          <a 
-            mat-raised-button 
-            color="primary"
-            [routerLink]="['/categories/edit', category.id]"
-            class="action-btn"
-          >
-            Edit
-          </a>
-          <button 
-            mat-raised-button 
-            color="warn"
-            (click)="confirmDelete(category.id)"
-            class="action-btn"
-          >
-            Delete
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Empty State -->
-  <div *ngIf="!isLoading && items.length === 0" class="empty-state">
-    <mat-icon>category</mat-icon>
-    <h3>No Categories Found</h3>
-    <p>Start by adding your first category</p>
-    <a mat-raised-button color="primary" routerLink="/categories/add">
-      Add Category
-    </a>
-  </div>
-</app-paginated-list>
+<ul *ngIf="!loading && !error">
+  <li *ngFor="let category of categories">
+    {{ category.name }}
+  </li>
+</ul>

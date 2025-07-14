@@ -1,10 +1,12 @@
-export interface PaginatedResponse<T> {
+export interface ApiResponse<T> {
   success: boolean;
   message: string[];
-  data: {
-    items: T[];
-    totalRecords: number;
-    pageNumber: number;
-    pageSize: number;
-  };
+  data: T;
+}
+
+export interface PaginatedResult<T> {
+  items: T[];
+  totalRecords: number;
+  pageNumber: number;
+  pageSize: number;
 }

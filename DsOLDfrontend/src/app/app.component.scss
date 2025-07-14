@@ -1,0 +1,28 @@
+.global-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Global styles that should apply to your entire app */
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.mat-snack-bar-container.error-snackbar {
+  background: #f44336;
+  color: white;
+}
+
+.mat-snack-bar-container.success-snackbar {
+  background: #4caf50;
+  color: white;
+}

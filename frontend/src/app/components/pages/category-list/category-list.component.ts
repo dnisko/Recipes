@@ -1,73 +1,38 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { PaginatedListComponent } from '../../shared/paginated-list/paginated-list.component';
+import { Category } from '../../../models/category/category.interface';
 import { CategoryService } from '../../../services/category.service';
-import { Category } from '../../../models/interfaces/category.interface';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-category-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    PaginatedListComponent,
-    MatProgressSpinnerModule,
-    MatButtonModule,
-    MatIconModule,
-    RouterModule
-  ],
+  imports: [CommonModule],
   templateUrl: './category-list.component.html',
-  styleUrls: ['./category-list.component.scss']
+  styleUrl: './category-list.component.scss'
 })
 export class CategoryListComponent implements OnInit {
-  isLoading = false;
-  items: Category[] = [];
-  pagination = {
-    pageNumber: 1,
-    pageSize: 10,
-    totalRecords: 0
-  };
+  categories: Category[] = [];
+  loading = true;
+  error: string | null = null;
 
-  constructor(
-    private categoryService: CategoryService,
-    private snackBar: MatSnackBar
-  ) {}
+  constructor(private categoryService: CategoryService) { }
 
   ngOnInit(): void {
     this.loadCategories();
   }
-
-  loadCategories(): void {
-    this.isLoading = true;
-    this.categoryService.getCategories(
-      this.pagination.pageNumber,
-      this.pagination.pageSize
-    ).subscribe({
+  
+  loadCategories() {
+    this.loading = true;
+    this.categoryService.getAllCategories({pageNumber: 1, pageSize: 10}).subscribe({
       next: (response) => {
-        this.items = response.data.items;
-        this.pagination.totalRecords = response.data.totalRecords;
-        this.isLoading = false;
+        this.categories = response.data.items;
+        this.loading = false;
       },
-      error: (error) => {
-        this.isLoading = false;
-        this.snackBar.open('Failed to load categories', 'Dismiss', {
-          duration: 3000
-        });
-        console.error('Error:', error);
+      error: (err) => {
+        this.error = 'Failed to load categories';
+        console.error(err);
+        this.loading = false;
       }
     });
   }
-
-  onPageChange(pageNumber: number): void {
-    this.pagination.pageNumber = pageNumber;
-    this.loadCategories();
-  }
-  confirmDelete(categoryId: number): void {
-  // Add your delete confirmation logic here
-  // You can use MatDialog for a confirmation modal
-}
 }
