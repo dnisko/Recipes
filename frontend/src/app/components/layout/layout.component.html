@@ -1,1 +1,21 @@
-<p>layout works!</p>
+<header class="flex items-center justify-between p-4 bg-gray-800 text-white">
+  <div class="flex items-center space-x-4">
+    <img src="assets/trans_bg.png" alt="Logo" class="h-10 w-auto" />
+
+    <span class="text-xl font-bold">My Recipes</span>
+  </div>
+
+  <nav class="space-x-4">
+    <a routerLink="/" routerLinkActive="font-bold underline" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/categories" routerLinkActive="font-bold underline">Categories</a>
+    <a routerLink="/recipes" routerLinkActive="font-bold underline">Recipes</a>
+  </nav>
+</header>
+
+<main class="p-4 min-h-[calc(100vh-144px)]">
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="bg-gray-100 text-center text-sm p-4 mt-auto">
+  © 2025 My Recipes App — All rights reserved.
+</footer>
