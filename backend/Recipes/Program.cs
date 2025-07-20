@@ -41,7 +41,10 @@ namespace Recipes
 
             builder.Services.AddEndpointsApiExplorer();
 
-            builder.Services.AddSwagger();
+            var swaggerSettings = builder.Configuration.GetSection("Swagger");
+            var darkMode = swaggerSettings.GetValue<bool>("DarkMode");
+
+            builder.Services.AddSwagger(builder.Configuration);
             builder.Services.AddCustomCors();
             builder.Services.AddJwt(builder.Configuration);
 
@@ -56,10 +59,18 @@ namespace Recipes
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.UseStaticFiles();
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Recipes API v1");
+                    c.SwaggerEndpoint("/swagger/v1/SwaggerDark.json", "Recipes API v1");
+                    var swaggerSettings = builder.Configuration.GetSection("Swagger");
+                    var darkMode = swaggerSettings.GetValue<bool>("DarkMode");
+                    Console.WriteLine($"Dark Mode: {darkMode}");
+                    if (darkMode)
+                    {
+                        c.InjectStylesheet("/swagger-ui/SwaggerDark.css");
+                    }
                 });
             }
 

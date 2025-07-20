@@ -82,21 +82,19 @@ namespace Services.Helpers
             return services;
         }
 
-        public static IServiceCollection AddSwagger(this IServiceCollection services)
+        public static IServiceCollection AddSwagger(this IServiceCollection services, IConfiguration configuration)
         {
+            var swaggerSettings = configuration.GetSection("Swagger");
+            var darkMode = swaggerSettings.GetValue<bool>("DarkMode");
+
             services.AddSwaggerGen(c =>
             {
-                //c.TagActionsBy(api => new[] { api.GroupName ?? "Uncategorized" });
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "Recipes API",
                     Version = "v1",
                     Description = "API for managing recipes and related data",
                 });
-                //c.OpenApiGeneratorOptions = new Swashbuckle.AspNetCore.SwaggerGen.OpenApiGeneratorOptions
-                //{
-                //    OpenApiVersion = "3.0.1"
-                //};
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer {token}')",
@@ -120,6 +118,11 @@ namespace Services.Helpers
                         Array.Empty<string>()
                     }
                 });
+
+                if (darkMode)
+                {
+                    c.CustomSchemaIds(type => type.ToString());
+                }
             });
 
             return services;
