@@ -1,3 +1,6 @@
+import { Ingredient } from "../ingredient/ingredient.interface";
+import { Tag } from "../tag/tag.interface";
+
 export interface Recipe {
     id: number;
     name: string;
@@ -9,6 +12,6 @@ export interface Recipe {
     servings: number;
     difficulty: number;
     categoryId: number;
-    ingredients: string[];
-    tags: string[];
+    ingredients: Ingredient[];
+    tags: Tag[];
 }

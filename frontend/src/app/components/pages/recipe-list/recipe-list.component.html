@@ -1,1 +1,35 @@
-<p>recipe-list works!</p>
+<mat-card *ngFor="let recipe of recipes" class="recipe-card">
+  <!-- <pre>{{ recipe | json }}</pre> -->
+  <mat-card-title>{{ recipe.name }}</mat-card-title>
+  <mat-card-content>
+    <p>{{ recipe.description }}</p>
+    <p><strong>Prep:</strong> {{ recipe.prepTime }} | <strong>Cook:</strong> {{ recipe.cookTime }}</p>
+    <p><strong>Servings:</strong> {{ recipe.servings }}</p>
+    <p><strong>Difficulty:</strong> {{ recipe.difficulty }}</p>
+
+    <div *ngIf="recipe.ingredients?.length">
+      <p><strong>Ingredients:</strong></p>
+      <ul>
+        <li *ngFor="let ing of recipe.ingredients; let i = index">
+          <span (click)="toggleIngredient(i)" style="cursor: pointer;">
+            {{ ing.ingredientName }}
+          </span>
+      
+          <div *ngIf="expandedIngredients[i]" style="margin-left: 1rem;">
+            <p>Quantity: {{ ing.quantity }}</p>
+            <p *ngIf="ing.unit">Unit: {{ ing.unit }}</p>
+            <!-- <p>Ingredient ID: {{ ing.ingredientId }}</p> -->
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div *ngIf="recipe.tags?.length">
+      <p><strong>Tags:</strong></p>
+      <ul>
+        <li *ngFor="let tag of recipe.tags">{{ tag.tagName }}</li>
+      </ul>
+    </div>
+  </mat-card-content>
+</mat-card>
+
