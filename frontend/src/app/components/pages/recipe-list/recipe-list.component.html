@@ -1,35 +1,51 @@
-<mat-card *ngFor="let recipe of recipes" class="recipe-card">
-  <!-- <pre>{{ recipe | json }}</pre> -->
-  <mat-card-title>{{ recipe.name }}</mat-card-title>
-  <mat-card-content>
-    <p>{{ recipe.description }}</p>
-    <p><strong>Prep:</strong> {{ recipe.prepTime }} | <strong>Cook:</strong> {{ recipe.cookTime }}</p>
-    <p><strong>Servings:</strong> {{ recipe.servings }}</p>
-    <p><strong>Difficulty:</strong> {{ recipe.difficulty }}</p>
+<div class="card-container">
+  <div *ngIf="loading" class="loading">Loading recipes...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
 
-    <div *ngIf="recipe.ingredients?.length">
-      <p><strong>Ingredients:</strong></p>
-      <ul>
-        <li *ngFor="let ing of recipe.ingredients; let i = index">
-          <span (click)="toggleIngredient(i)" style="cursor: pointer;">
-            {{ ing.ingredientName }}
-          </span>
-      
-          <div *ngIf="expandedIngredients[i]" style="margin-left: 1rem;">
-            <p>Quantity: {{ ing.quantity }}</p>
-            <p *ngIf="ing.unit">Unit: {{ ing.unit }}</p>
-            <!-- <p>Ingredient ID: {{ ing.ingredientId }}</p> -->
-          </div>
-        </li>
-      </ul>
-    </div>
+  <div *ngIf="!loading && !error && recipes.length" class="card-grid">
 
-    <div *ngIf="recipe.tags?.length">
-      <p><strong>Tags:</strong></p>
-      <ul>
-        <li *ngFor="let tag of recipe.tags">{{ tag.tagName }}</li>
-      </ul>
-    </div>
-  </mat-card-content>
-</mat-card>
+    <mat-card *ngFor="let recipe of recipes" class="card">
+      <mat-card-title>{{ recipe.name }}</mat-card-title>
+      <mat-card-content>
+        <p>{{ recipe.description }}</p>
+        <p><strong>Prep:</strong> {{ recipe.prepTime }} | <strong>Cook:</strong> {{ recipe.cookTime }}</p>
+        <p><strong>Servings:</strong> {{ recipe.servings }}</p>
+        <p><strong>Difficulty:</strong> {{ recipe.difficulty }}</p>
 
+        <div *ngIf="recipe.ingredients?.length">
+          <p><strong>Ingredients:</strong></p>
+          <ul>
+            <li *ngFor="let ing of recipe.ingredients; let i = index">
+              <span
+                (click)="toggleIngredient(recipe.id, i)"
+                style="cursor: pointer; color: #3f51b5; font-weight: 500;"
+              >
+                {{ ing.ingredientName }}
+              </span>
+
+              <div
+                [@expandCollapse]="isIngredientExpanded(recipe.id, i) ? 'expanded' : 'collapsed'"
+              >
+                <p>Quantity: {{ ing.quantity }}</p>
+                <p *ngIf="ing.unit">Unit: {{ ing.unit }}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div *ngIf="recipe.tags?.length">
+          <p><strong>Tags:</strong></p>
+          <mat-chip-listbox>
+            <mat-chip *ngFor="let tag of recipe.tags" color="primary" selected>
+              {{ tag.tagName }}
+            </mat-chip>
+          </mat-chip-listbox>
+        </div>
+        
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div *ngIf="!loading && !error && !recipes.length" class="empty">
+    No recipes found.
+  </div>
+</div>

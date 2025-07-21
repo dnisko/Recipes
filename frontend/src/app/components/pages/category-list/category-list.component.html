@@ -1,18 +1,14 @@
+<div class="card-container">
+  <div *ngIf="loading" class="loading">Loading categories...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
 
-<div *ngIf="loading" class="loading">
-  Loading categories...
-</div>
+  <ul *ngIf="!loading && !error && categories.length" class="card-grid">
+    <li *ngFor="let category of categories" class="card">
+      <strong>{{ category.name }}</strong>
+    </li>
+  </ul>
 
-<div *ngIf="error" class="error">
-  {{ error }}
-</div>
-
-<ul *ngIf="!loading && !error && categories.length" class="category-list">
-  <li *ngFor="let category of categories">
-    <strong>{{ category.name }}</strong>
-  </li>
-</ul>
-
-<div *ngIf="!loading && !error && !categories.length" class="empty">
-  No categories found.
+  <div *ngIf="!loading && !error && !categories.length" class="empty">
+    No categories found.
+  </div>
 </div>

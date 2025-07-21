@@ -1,27 +1,6 @@
-.loading,
-.error,
-.empty {
-  margin: 1rem;
-  font-size: 1.2rem;
-  text-align: center;
-}
-
-.error {
-  color: red;
-}
-
-ul.category-list {
-  list-style: none;
-  padding: 0;
-  margin: 2rem auto;
-  max-width: 400px;
-
-  li {
-    padding: 1rem;
-    border: 1px solid #ccc;
-    margin-bottom: 1rem;
-    border-radius: 8px;
-    background: #f8f9fa;
-    text-align: center;
-  }
+.card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
 }
