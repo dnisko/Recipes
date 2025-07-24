@@ -39,19 +39,10 @@ namespace DataAccess.Implementations
         {
             try
             {
-                //var maxId = await _table.MaxAsync(x => x.Id);
-                //if (id < 0 || id > maxId)
-                //{
-                //    throw new KeyNotFoundException($"Entity with id: {id} is not found.");
-                //}
-
-                //return (await _table.FindAsync(id))!;
                 return await _table.FindAsync(id);
             }
             catch (Exception)//(InvalidOperationException ex)
             {
-                //_logger.LogError(ex.InnerException, "Error");
-                //throw new InvalidOperationException(ex.Message);
                 throw;
             }
         }
@@ -111,16 +102,6 @@ namespace DataAccess.Implementations
                 throw;
             }
         }
-
-        //public async Task<PaginatedResult<T>> GetPagedAsync(IQueryable<T> query, int pageNumber, int pageSize)
-        //{
-        //    var totalRecords = await query.CountAsync();
-        //    var items = await query
-        //        .Skip((pageNumber - 1) * pageSize)
-        //        .Take(pageSize)
-        //        .ToListAsync();
-        //    return new PaginatedResult<T>(items, totalRecords, pageNumber, pageSize);
-        //}
 
         public async Task<PaginatedResult<T>> GetPagedAsync(PaginationParams paginationParams)
         {

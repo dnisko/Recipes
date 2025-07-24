@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Common.Responses;
+using DomainModels.Enums;
 using DTOs;
 using Microsoft.EntityFrameworkCore;
 
@@ -55,6 +56,32 @@ namespace Common.Helpers
                         query = query.Where(x =>
                             EF.Property<ICollection<object>>(x, "Recipes").Count == 0);
                     }
+                }
+            }
+
+            if (baseParams is UserPaginationParams userParams)
+            {
+                if (userParams.Id != null && typeof(T).GetProperty("Id") != null)
+                {
+                    query = query.Where(x =>
+                        EF.Property<int>(x, "Id") == userParams.Id.Value);
+                }
+                if (userParams.Username != null && typeof(T).GetProperty("Username") != null)
+                {
+                    query = query.Where(x =>
+                        EF.Property<string>(x, "Username").Contains(userParams.Username));
+                }
+                if (userParams.Email != null && typeof(T).GetProperty("Email") != null)
+                {
+                    query = query.Where(x =>
+                        EF.Property<string>(x, "Email").Contains(userParams.Email));
+                }
+                if (userParams.Role != null && typeof(T).GetProperty("Role") != null)
+                {
+                    query = query.Where(x =>
+                        EF.Property<string>(x, "Role").Equals(Enum.GetName(typeof(UserRole), 
+                        userParams.Role), 
+                        StringComparison.OrdinalIgnoreCase));
                 }
             }
 

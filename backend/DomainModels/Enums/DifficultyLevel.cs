@@ -1,4 +1,4 @@
-﻿namespace DomainModels
+﻿namespace DomainModels.Enums
 {
     public enum DifficultyLevel
     {

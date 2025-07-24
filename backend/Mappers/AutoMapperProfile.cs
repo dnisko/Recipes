@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Common.Responses;
 using DomainModels;
+using DomainModels.Enums;
 using DTOs.CategoryDto;
 using DTOs.IngredientDto;
 using DTOs.RecipeDto;
 using DTOs.TagDto;
+using DTOs.UserDto;
 
 namespace Mappers
 {
@@ -95,6 +97,25 @@ namespace Mappers
                 .ConvertUsing(typeof(CustomResponseTypeConverter<,>));
 
             CreateMap<Category, CategorySimpleDto>().ReverseMap();
+
+            //User mappings
+            CreateMap<User, LoginUserDto>().ReverseMap();
+            CreateMap<User, LoginUserResponseDto>().ReverseMap();
+            //CreateMap<RegisterUserDto, User>()
+            //    .ForMember(dest => dest.Role, opt => opt.MapFrom(src => UserRole.User))
+            //    .ReverseMap();
+            CreateMap<UpdateUserDto, User>()
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
+                .ForMember(dest => dest.Role, opt => opt.Ignore())
+                .ReverseMap();
+            //.ForAllOtherMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<User, RegisterUserResponseDto>().ReverseMap();
+            CreateMap<User, UpdateUserDto>().ReverseMap();
+            CreateMap<User, UpdateUserResponseDto>().ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, UserResponseDto>()
+                .ForMember(dest => dest.Role, opt => opt.Ignore())
+                .ReverseMap();
         }
     }
 }

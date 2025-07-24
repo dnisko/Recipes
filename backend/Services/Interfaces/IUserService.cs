@@ -1,4 +1,5 @@
 ﻿using Common.Responses;
+using DTOs;
 using DTOs.UserDto;
 
 namespace Services.Interfaces
@@ -7,10 +8,11 @@ namespace Services.Interfaces
     {
         Task<CustomResponse<RegisterUserResponseDto>> RegisterUserAsync(RegisterUserDto registerUser);
         Task<CustomResponse<LoginUserResponseDto>> LoginUserAsync(LoginUserDto loginUser);
-        Task<CustomResponse<UserDto>> GetUserByIdAsync(int id);
-        Task<CustomResponse<List<UserDto>>> GetAllUsersAsync();
+        Task<CustomResponse<UserResponseDto>> GetUserByIdAsync(int id);
+        Task<CustomResponse<PaginatedResult<UserResponseDto>>> GetAllUsersAsync(UserPaginationParams paginationParams);
         //Task<CustomResponse<AddUserDto>> CreateUserAsync(UserDto user);
-        Task<CustomResponse<UpdateUserDto>> UpdateUserAsync(UpdateUserDto updateUser, string username);
+        Task<CustomResponse<UpdateUserResponseDto>> UpdateUserAsync(UpdateUserDto updateUser, string username);
         Task<CustomResponse> DeleteUserAsync(int id);
+        Task<CustomResponse<UpdateUserResponseDto>> MakeAdminAsync(int id);
     }
 }

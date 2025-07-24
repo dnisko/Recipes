@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DomainModels.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace DomainModels
 {

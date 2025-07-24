@@ -1,6 +1,8 @@
 ﻿using Common.Exceptions.ServerException;
 using Common.Exceptions.UserException;
+using DTOs;
 using DTOs.UserDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
@@ -41,6 +43,11 @@ namespace Recipes.Controllers
             try
             {
                 var response = await _userService.LoginUserAsync(loginUser);
+                if (!response.IsSuccessful)
+                {
+                    return Unauthorized(response);
+                }
+
                 return Response(response);
             }
             catch (UserDataException ex)
@@ -72,11 +79,11 @@ namespace Recipes.Controllers
         }
 
         [HttpGet("getAllUsers")]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers([FromQuery] UserPaginationParams paginationParams)
         {
             try
             {
-                var response = await _userService.GetAllUsersAsync();
+                var response = await _userService.GetAllUsersAsync(paginationParams);
                 return Response(response);
             }
             catch (UserDataException ex)
@@ -113,6 +120,24 @@ namespace Recipes.Controllers
             try
             {
                 var response = await _userService.DeleteUserAsync(id);
+                return Response(response);
+            }
+            catch (UserDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPut("makeAdmin/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> MakeAdmin(int id)
+        {
+            try
+            {
+                var response = await _userService.MakeAdminAsync(id);
                 return Response(response);
             }
             catch (UserDataException ex)

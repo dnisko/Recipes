@@ -1,5 +1,6 @@
 ﻿using DataAccess.Interfaces;
 using DomainModels;
+using DomainModels.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Implementations

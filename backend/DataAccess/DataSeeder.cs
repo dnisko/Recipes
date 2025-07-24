@@ -1,4 +1,5 @@
 ﻿using DomainModels;
+using DomainModels.Enums;
 
 namespace DataAccess
 {

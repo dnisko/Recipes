@@ -46,7 +46,6 @@ namespace Services.Implementations
 
             return CustomResponse<PaginatedResult<RecipeDto>>.Success(result);
         }
-
         public async Task<CustomResponse<RecipeDto>> GetRecipeByIdAsync(int id)
         {
             try
@@ -65,14 +64,13 @@ namespace Services.Implementations
                 throw new RecipeDataException($"Error while getting the categories: {ex.Message}");
             }
         }
-
-        public async Task<CustomResponse<List<RecipeDto>>> GetRecipesByCategoryAsync(int categoryId)
+        public async Task<CustomResponse<PaginatedResult<RecipeDto>>> GetRecipesByCategoryAsync(int categoryId)
         {
             try
             {
                 var recipes = await _recipeRepository.GetRecipesByCategory(categoryId);
                 var response = CustomResponseFactory.FromList(recipes, $"No recipes found for category with id {categoryId}.");
-                var recipesDto = _mapper.Map<CustomResponse<List<RecipeDto>>>(response);
+                var recipesDto = _mapper.Map<CustomResponse<PaginatedResult<RecipeDto>>>(response);
                 return recipesDto;
             }
             catch (RecipeDataException ex)
@@ -80,19 +78,13 @@ namespace Services.Implementations
                 throw new RecipeDataException($"Error while getting the categories: {ex.Message}");
             }
         }
-
-        public async Task<CustomResponse<List<RecipeDto>>> SearchRecipesAsync(string keyword)
+        public async Task<CustomResponse<PaginatedResult<RecipeDto>>> SearchRecipesAsync(string keyword)
         {
             try
             {
                 var recipes = await _recipeRepository.SearchRecipes(keyword);
-                //if (recipes == null || !recipes.Any())
-                //{
-                //    _logger.LogError($"No recipes found with keyword {keyword}.");
-                //    return new CustomResponse<List<RecipeDto>>($"No recipes found with keyword {keyword}.");
-                //}
                 var response = CustomResponseFactory.FromList(recipes, $"No recipes found with keyword {keyword}.");
-                var recipesDto = _mapper.Map<CustomResponse<List<RecipeDto>>>(response);
+                var recipesDto = _mapper.Map<CustomResponse<PaginatedResult<RecipeDto>>>(response);
                 return recipesDto;
             }
             catch (RecipeDataException ex)
@@ -187,18 +179,13 @@ namespace Services.Implementations
 
         
         //Ingredients
-        public async Task<CustomResponse<List<IngredientDto>>> GetIngredientsByRecipe(int recipeId)
+        public async Task<CustomResponse<PaginatedResult<IngredientDto>>> GetIngredientsByRecipe(int recipeId)
         {
             try
             {
                 var ingredients = await _ingredientRepository.GetIngredientsByRecipe(recipeId);
-                //if (ingredients == null || !ingredients.Any())
-                //{
-                //    _logger.LogError($"No ingredients found for recipe with id {recipeId}.");
-                //    return new CustomResponse<List<IngredientDto>>($"No ingredients found for recipe with id {recipeId}.");
-                //}
                 var result = CustomResponseFactory.FromList(ingredients, $"No ingredients found for recipe with id {recipeId}.");
-                var ingredientDto = _mapper.Map<CustomResponse<List<IngredientDto>>>(result);
+                var ingredientDto = _mapper.Map<CustomResponse<PaginatedResult<IngredientDto>>>(result);
                 return ingredientDto;
             }
             catch (IngredientDataException ex)
@@ -209,18 +196,14 @@ namespace Services.Implementations
 
 
         //Tag
-        public async Task<CustomResponse<List<TagDto>>> GetPopularTagsAsync()
+        public async Task<CustomResponse<PaginatedResult<TagDto>>> GetPopularTagsAsync()
         {
             try
             {
                 var tags = await _tagRepository.GetPopularTags();
-                //if (tags == null || !tags.Any())
-                //{
-                //    _logger.LogError($"No tags found.");
-                //    return new CustomResponse<List<TagDto>>($"No tags found.");
-                //}
+
                 var response = CustomResponseFactory.FromList(tags, "No tags found.");
-                var tagDto = _mapper.Map<CustomResponse<List<TagDto>>>(response);
+                var tagDto = _mapper.Map<CustomResponse<PaginatedResult<TagDto>>>(response);
                 return tagDto;
             }
             catch (TagDataException ex)
@@ -229,18 +212,13 @@ namespace Services.Implementations
             }
         }
 
-        public async Task<CustomResponse<List<TagDto>>> GetTagsByARecipeAsync(int id)
+        public async Task<CustomResponse<PaginatedResult<TagDto>>> GetTagsByARecipeAsync(int id)
         {
             try
             {
                 var tags = await _tagRepository.GetTagsByRecipe(id);
-                //if (tags == null || !tags.Any())
-                //{
-                //    _logger.LogError($"No tags found.");
-                //    return new CustomResponse<List<TagDto>>($"No tags found.");
-                //}
                 var result = CustomResponseFactory.FromList(tags, "No tags found.");
-                var tagDto = _mapper.Map<CustomResponse<List<TagDto>>>(result);
+                var tagDto = _mapper.Map<CustomResponse<PaginatedResult<TagDto>>>(result);
                 return tagDto;
             }
             catch (TagDataException ex)

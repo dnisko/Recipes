@@ -1,15 +1,17 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Cryptography;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using Common.Exceptions.UserException;
 using Common.Responses;
 using DataAccess.Interfaces;
 using DomainModels;
+using DTOs;
+using DTOs.RecipeDto;
 using DTOs.UserDto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Services.Interfaces;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Services.Implementations
 {
@@ -43,7 +45,13 @@ namespace Services.Implementations
                 }
                 //var mappedUser = _mapper.Map<User>(registerUser);
                 var hashedPassword = HashPassword(registerUser.Password);
-                var user = new User { Username = registerUser.Username, PasswordHash = hashedPassword};
+                var user = new User
+                {
+                    Username = registerUser.Username,
+                    PasswordHash = hashedPassword,
+                    Email = registerUser.Email,
+                    Role = DomainModels.Enums.UserRole.User
+                };
                 await _userRepository.Register(user);
 
                 //_logger.LogInfo($"User with username \"{registerUser.Username}\" was added.");
@@ -106,7 +114,7 @@ namespace Services.Implementations
             }
         }
 
-        public async Task<CustomResponse<UserDto>> GetUserByIdAsync(int id)
+        public async Task<CustomResponse<UserResponseDto>> GetUserByIdAsync(int id)
         {
             try
             {
@@ -114,10 +122,10 @@ namespace Services.Implementations
                 if (user == null)
                 {
                     _logger.LogError($"User with id {id} not found.");
-                    return CustomResponse<UserDto>.Fail($"User with id {id} not found.");
+                    return CustomResponse<UserResponseDto>.Fail($"User with id {id} not found.");
                 }
-                var userDto = _mapper.Map<UserDto>(user);
-                return CustomResponse<UserDto>.Success(userDto);
+                var userDto = _mapper.Map<UserResponseDto>(user);
+                return CustomResponse<UserResponseDto>.Success(userDto);
             }
             catch (UserDataException ex)
             {
@@ -125,19 +133,18 @@ namespace Services.Implementations
             }
         }
 
-        public async Task<CustomResponse<List<UserDto>>> GetAllUsersAsync()
+        public async Task<CustomResponse<PaginatedResult<UserResponseDto>>> GetAllUsersAsync(UserPaginationParams paginationParams)
         {
             try
             {
-                var users = await _userRepository.GetAllAsync();
-                //if (users == null || !users.Any())
-                //{
-                //    _logger.LogError("No users found.");
-                //    return new CustomResponse<UpdateUserDto>($"No users found.");
-                //}
-                var response = CustomResponseFactory.FromList(users, "No users found.");
-                var usersDto = _mapper.Map<CustomResponse<List<UserDto>>>(response);
-                return usersDto;
+                var paged = await _userRepository.GetPagedAsync(paginationParams);
+                if (!paged.Items.Any())
+                    return CustomResponse<PaginatedResult<UserResponseDto>>.Fail("No recipes found.");
+                //var response = CustomResponseFactory.FromList(users, "No users found.");
+
+                var mapped = _mapper.Map<List<UserResponseDto>>(paged.Items);
+                var result = new PaginatedResult<UserResponseDto>(mapped, paged.TotalRecords, paginationParams.PageNumber, paginationParams.PageSize);
+                return CustomResponse<PaginatedResult<UserResponseDto>>.Success(result);
             }
             catch (UserDataException ex)
             {
@@ -145,18 +152,15 @@ namespace Services.Implementations
             }
         }
 
-        public async Task<CustomResponse<UpdateUserDto>> UpdateUserAsync(UpdateUserDto updateUser, string username)
+        public async Task<CustomResponse<UpdateUserResponseDto>> UpdateUserAsync(UpdateUserDto updateUser, string username)
         {
             try
             {
                 var user = await _userRepository.GetSingleUserByUsernameAsync(username);
-                //var user = usernames.FirstOrDefault();
-                //var user1 = await _userRepository.GetByIdAsync(user.Id);
                 if (user == null)
                 {
                     _logger.LogInformation("User not found!");
-                    return CustomResponse<UpdateUserDto>.Fail($"User with username: \"{username}\" not found!");
-                    //throw new UserNotFoundException("User not found!");
+                    return CustomResponse<UpdateUserResponseDto>.Fail($"User with username: \"{username}\" not found!");
                 }
 
                 if (!string.IsNullOrEmpty(updateUser.Password))
@@ -166,8 +170,8 @@ namespace Services.Implementations
 
                 _mapper.Map(updateUser, user);
                 await _userRepository.UpdateAsync(user);
-
-                return CustomResponse<UpdateUserDto>.Success(updateUser);
+                var updatedUserDto = _mapper.Map<UpdateUserResponseDto>(user);
+                return CustomResponse<UpdateUserResponseDto>.Success(updatedUserDto);
             }
             catch (UserDataException ex)
             {
@@ -192,6 +196,39 @@ namespace Services.Implementations
             catch (UserDataException ex)
             {
                 throw new UserDataException($"Error while getting the user: {ex.Message}");
+            }
+        }
+
+        public async Task<CustomResponse<UpdateUserResponseDto>> MakeAdminAsync(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    _logger.LogError("Invalid user ID provided.");
+                    return CustomResponse<UpdateUserResponseDto>.Fail("Invalid user ID provided.");
+                }
+
+                var user = await _userRepository.GetByIdAsync(id);
+                if (user == null)
+                {
+                    _logger.LogError($"User with id {id} not found.");
+                    return CustomResponse<UpdateUserResponseDto>.Fail($"User with id {id} not found.");
+                }
+                if (user.Role == DomainModels.Enums.UserRole.Admin)
+                {
+                    _logger.LogInformation($"User with id {id} is already an admin.");
+                    return CustomResponse<UpdateUserResponseDto>.Fail($"User with id {id} is already an admin.");
+                }
+                user.Role = DomainModels.Enums.UserRole.Admin;
+                await _userRepository.UpdateAsync(user);
+                _logger.LogInformation($"User with id {id} is now an admin.");
+                var userDto = _mapper.Map<UpdateUserResponseDto>(user);
+                return CustomResponse<UpdateUserResponseDto>.Success(userDto, $"User with id {id} is now an admin.");
+            }
+            catch (UserDataException ex)
+            {
+                throw new UserDataException($"Error while making user an admin: {ex.Message}");
             }
         }
 

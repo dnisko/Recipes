@@ -1,5 +1,7 @@
 ﻿using DomainModels;
+using DomainModels.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace DataAccess
 {
@@ -53,6 +55,10 @@ namespace DataAccess
                 .HasOne(rt => rt.Tag)
                 .WithMany(t => t.RecipeTags)
                 .HasForeignKey(rt => rt.TagId);
+
+            //builder.Entity<User>()
+            //    .Property(u => u.Role)
+            //    .HasDefaultValue(UserRole.User);
         }
     }
 }
