@@ -1,5 +1,5 @@
 ﻿using Common.Responses;
-using DTOs;
+using DTOs.Pagination;
 using DTOs.IngredientDto;
 using DTOs.RecipeDto;
 using DTOs.TagDto;

@@ -1,6 +1,7 @@
 ﻿using Common.Exceptions.ServerException;
 using Common.Exceptions.UserException;
-using DTOs;
+using DomainModels.Enums;
+using DTOs.Pagination;
 using DTOs.UserDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -83,6 +84,12 @@ namespace Recipes.Controllers
         {
             try
             {
+                if (string.IsNullOrEmpty(paginationParams.SortBy))
+                    paginationParams.SortBy = "Username"; // or "Id"
+
+                if (string.IsNullOrEmpty(paginationParams.SortDirection))
+                    paginationParams.SortDirection = "asc";
+
                 var response = await _userService.GetAllUsersAsync(paginationParams);
                 return Response(response);
             }
@@ -131,13 +138,13 @@ namespace Recipes.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpPut("makeAdmin/{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> MakeAdmin(int id)
+        [HttpPut("changeRole/{id}")]
+        //[Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ChangeRole(int id, [FromBody] ChangeUserRoleDto dto)
         {
             try
             {
-                var response = await _userService.MakeAdminAsync(id);
+                var response = await _userService.ChangeUserRoleAsync(id, dto);
                 return Response(response);
             }
             catch (UserDataException ex)

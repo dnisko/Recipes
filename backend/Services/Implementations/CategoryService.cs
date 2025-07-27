@@ -3,9 +3,8 @@ using Common.Exceptions.CategoryException;
 using Common.Responses;
 using DataAccess.Interfaces;
 using DomainModels;
-using DTOs;
+using DTOs.Pagination;
 using DTOs.CategoryDto;
-using DTOs.RecipeDto;
 using Microsoft.Extensions.Logging;
 using Services.Interfaces;
 

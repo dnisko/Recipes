@@ -1,6 +1,6 @@
 ﻿using Common.Exceptions.CategoryException;
 using Common.Exceptions.ServerException;
-using DTOs;
+using DTOs.Pagination;
 using DTOs.CategoryDto;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;

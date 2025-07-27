@@ -14,22 +14,6 @@ namespace Mappers
     {
         public AutoMapperProfile()
         {
-            // Recipe mappings
-            /*
-            CreateMap<Recipe, RecipeDto>()
-                .ReverseMap()
-                .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients))
-                .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags))
-                .ForMember(dest => dest.Difficulty, opt => opt.MapFrom(src => (int)src.Difficulty))
-                .ForMember(dest => dest.Difficulty, opt => opt.MapFrom(src => (DifficultyLevel)src.Difficulty));
-            CreateMap<Recipe, AddRecipeDto>()
-                .ReverseMap()
-                .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients))
-                .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
-            CreateMap<Recipe, UpdateRecipeDto>().ReverseMap();
-                //.ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients))
-                //.ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
-            */
             // Recipe -> RecipeDto (with nested mappings)
             CreateMap<Recipe, RecipeDto>()
                 .ForMember(dest => dest.Difficulty, opt => opt.MapFrom(src => (int)src.Difficulty))
@@ -69,16 +53,6 @@ namespace Mappers
             CreateMap<Ingredient, AddIngredientDto>().ReverseMap();
             CreateMap<Ingredient, UpdateIngredientDto>().ReverseMap();
 
-            //RecipeIngredient mappings
-            //CreateMap<RecipeIngredient, RecipeIngredientDto>()
-            //    .ForMember(dest => dest.IngredientName, opt =>
-            //        opt.MapFrom(src => src.Ingredient.Name));
-            //CreateMap<RecipeIngredientDto, RecipeIngredient>()
-            //    .ForMember(dest => dest.Ingredient,
-            //        opt => opt.Ignore()) // Will be loaded in service
-            //    .ForMember(dest => dest.Recipe,
-            //        opt => opt.Ignore());    // Set in service as well
-
             // Tag mappings
             CreateMap<Tag, TagDto>().ReverseMap();
             CreateMap<Tag, AddTagDto>().ReverseMap();
@@ -101,20 +75,16 @@ namespace Mappers
             //User mappings
             CreateMap<User, LoginUserDto>().ReverseMap();
             CreateMap<User, LoginUserResponseDto>().ReverseMap();
-            //CreateMap<RegisterUserDto, User>()
-            //    .ForMember(dest => dest.Role, opt => opt.MapFrom(src => UserRole.User))
-            //    .ReverseMap();
             CreateMap<UpdateUserDto, User>()
                 .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
                 .ForMember(dest => dest.Role, opt => opt.Ignore())
                 .ReverseMap();
-            //.ForAllOtherMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<User, RegisterUserResponseDto>().ReverseMap();
             CreateMap<User, UpdateUserDto>().ReverseMap();
             CreateMap<User, UpdateUserResponseDto>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, UserResponseDto>()
-                .ForMember(dest => dest.Role, opt => opt.Ignore())
+                //.ForMember(dest => dest.Role, opt => opt.Ignore())
                 .ReverseMap();
         }
     }

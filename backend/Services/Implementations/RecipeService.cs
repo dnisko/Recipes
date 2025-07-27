@@ -5,7 +5,7 @@ using Common.Exceptions.TagException;
 using Common.Responses;
 using DataAccess.Interfaces;
 using DomainModels;
-using DTOs;
+using DTOs.Pagination;
 using DTOs.IngredientDto;
 using DTOs.RecipeDto;
 using DTOs.TagDto;

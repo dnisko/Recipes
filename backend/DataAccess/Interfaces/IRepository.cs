@@ -1,6 +1,6 @@
 ﻿using Common.Responses;
 using DomainModels;
-using DTOs;
+using DTOs.Pagination;
 
 namespace DataAccess.Interfaces
 {
@@ -16,6 +16,6 @@ namespace DataAccess.Interfaces
         //    int pageNumber,
         //    int pageSize);
 
-        Task<PaginatedResult<T>> GetPagedAsync(PaginationParams paginationParams);
+        Task<PaginatedResult<T>> GetPagedAsync(BasePaginationParams paginationParams);
     }
 }

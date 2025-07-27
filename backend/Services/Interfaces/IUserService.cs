@@ -1,5 +1,6 @@
 ﻿using Common.Responses;
-using DTOs;
+using DomainModels.Enums;
+using DTOs.Pagination;
 using DTOs.UserDto;
 
 namespace Services.Interfaces
@@ -13,6 +14,6 @@ namespace Services.Interfaces
         //Task<CustomResponse<AddUserDto>> CreateUserAsync(UserDto user);
         Task<CustomResponse<UpdateUserResponseDto>> UpdateUserAsync(UpdateUserDto updateUser, string username);
         Task<CustomResponse> DeleteUserAsync(int id);
-        Task<CustomResponse<UpdateUserResponseDto>> MakeAdminAsync(int id);
+        Task<CustomResponse<UpdateUserResponseDto>> ChangeUserRoleAsync(int id, ChangeUserRoleDto dto);
     }
 }

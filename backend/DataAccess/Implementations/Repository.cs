@@ -2,9 +2,8 @@
 using Common.Responses;
 using DataAccess.Interfaces;
 using DomainModels;
-using DTOs;
+using DTOs.Pagination;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace DataAccess.Implementations
 {
@@ -103,7 +102,7 @@ namespace DataAccess.Implementations
             }
         }
 
-        public async Task<PaginatedResult<T>> GetPagedAsync(PaginationParams paginationParams)
+        public async Task<PaginatedResult<T>> GetPagedAsync(BasePaginationParams paginationParams)
         {
             return await PaginationHelper.ApplyPaginationAsync(_table.AsQueryable(), paginationParams);
         }

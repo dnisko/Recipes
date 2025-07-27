@@ -3,6 +3,7 @@ using Common.Settings;
 using Mappers;
 using Serilog;
 using Services.Helpers;
+using System.Text.Json.Serialization;
 
 namespace Recipes
 {
@@ -18,6 +19,10 @@ namespace Recipes
             var appSettings = appConfig.Get<AppSettings>();
 
             builder.Services.AddControllers();
+                //.AddJsonOptions(options =>
+                //{
+                //    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                //});
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             builder.Services.AddHttpClient();
 
@@ -63,7 +68,7 @@ namespace Recipes
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/SwaggerDark.json", "Recipes API v1");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                     var swaggerSettings = builder.Configuration.GetSection("Swagger");
                     var darkMode = swaggerSettings.GetValue<bool>("DarkMode");
                     Console.WriteLine($"Dark Mode: {darkMode}");

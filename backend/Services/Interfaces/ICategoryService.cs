@@ -1,5 +1,5 @@
 ﻿using Common.Responses;
-using DTOs;
+using DTOs.Pagination;
 using DTOs.CategoryDto;
 
 namespace Services.Interfaces

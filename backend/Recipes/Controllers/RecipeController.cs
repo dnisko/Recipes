@@ -2,8 +2,7 @@
 using Common.Exceptions.RecipeException;
 using Common.Exceptions.ServerException;
 using Common.Exceptions.TagException;
-using Common.Responses;
-using DTOs;
+using DTOs.Pagination;
 using DTOs.RecipeDto;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;

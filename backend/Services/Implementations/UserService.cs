@@ -3,8 +3,8 @@ using Common.Exceptions.UserException;
 using Common.Responses;
 using DataAccess.Interfaces;
 using DomainModels;
-using DTOs;
-using DTOs.RecipeDto;
+using DomainModels.Enums;
+using DTOs.Pagination;
 using DTOs.UserDto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -38,12 +38,9 @@ namespace Services.Implementations
             {
                 if (string.IsNullOrWhiteSpace(registerUser.Username) || string.IsNullOrWhiteSpace(registerUser.Password))
                 {
-                    //_logger.LogInfo("Username and password must be provided!");
                     _logger.LogError("Username and password must be provided!");
                     return CustomResponse<RegisterUserResponseDto>.Fail("Username and password must be provided!");
-                    //return CustomResponseFactory.FromList(registerUser, "Username and password must be provided!");
                 }
-                //var mappedUser = _mapper.Map<User>(registerUser);
                 var hashedPassword = HashPassword(registerUser.Password);
                 var user = new User
                 {
@@ -54,14 +51,12 @@ namespace Services.Implementations
                 };
                 await _userRepository.Register(user);
 
-                //_logger.LogInfo($"User with username \"{registerUser.Username}\" was added.");
                 var response = _mapper.Map<RegisterUserResponseDto>(user);
                 _logger.LogInformation($"User with username \"{registerUser.Username}\" was added.");
                 return CustomResponse<RegisterUserResponseDto>.Success(response, $"User with username \"{registerUser.Username}\" was added.");
             }
             catch (DbUpdateException dbEx)
             {
-                // Log specific EF-related exception
                 _logger.LogError(dbEx, "Database update error occurred.");
                 throw;
             }
@@ -93,12 +88,6 @@ namespace Services.Implementations
                     _logger.LogError($"Invalid password for user \"{loginUser.Username}\".");
                     return CustomResponse<LoginUserResponseDto>.Fail($"Invalid password for user \"{loginUser.Username}\".");
                 }
-                //var checkPassword = await _userRepository.CheckPasswordAsync(hashedPassword);
-                //if (checkPassword == null)
-                //{
-                //    _logger.LogError($"Invalid password for user \"{loginUser.Username}\".");
-                //    return CustomResponse<LoginUserResponseDto>.Fail($"Invalid password for user \"{loginUser.Username}\".");
-                //}
 
                 var token = await _tokenService.GenerateTokenAsync(user);
 
@@ -139,9 +128,12 @@ namespace Services.Implementations
             {
                 var paged = await _userRepository.GetPagedAsync(paginationParams);
                 if (!paged.Items.Any())
-                    return CustomResponse<PaginatedResult<UserResponseDto>>.Fail("No recipes found.");
-                //var response = CustomResponseFactory.FromList(users, "No users found.");
+                    return CustomResponse<PaginatedResult<UserResponseDto>>.Fail("No users found.");
 
+                foreach (var user in paged.Items)
+                {
+                    Console.WriteLine($"[DEBUG] User ID: {user.Id}, Username: {user.Username}, Role: {user.Role}, Email: {user.Email}");
+                }
                 var mapped = _mapper.Map<List<UserResponseDto>>(paged.Items);
                 var result = new PaginatedResult<UserResponseDto>(mapped, paged.TotalRecords, paginationParams.PageNumber, paginationParams.PageSize);
                 return CustomResponse<PaginatedResult<UserResponseDto>>.Success(result);
@@ -199,32 +191,53 @@ namespace Services.Implementations
             }
         }
 
-        public async Task<CustomResponse<UpdateUserResponseDto>> MakeAdminAsync(int id)
+        public async Task<CustomResponse<UpdateUserResponseDto>> ChangeUserRoleAsync(int id, ChangeUserRoleDto dto)
         {
             try
             {
+                string message = string.Empty;
                 if (id <= 0)
                 {
-                    _logger.LogError("Invalid user ID provided.");
-                    return CustomResponse<UpdateUserResponseDto>.Fail("Invalid user ID provided.");
+                    message = "Invalid user ID provided.";
+                    _logger.LogError(message);
+                    return CustomResponse<UpdateUserResponseDto>.Fail(message);
                 }
 
                 var user = await _userRepository.GetByIdAsync(id);
                 if (user == null)
                 {
-                    _logger.LogError($"User with id {id} not found.");
-                    return CustomResponse<UpdateUserResponseDto>.Fail($"User with id {id} not found.");
+                    message = $"User with id {id} not found.";
+                    _logger.LogError(message);
+                    return CustomResponse<UpdateUserResponseDto>.Fail(message);
                 }
-                if (user.Role == DomainModels.Enums.UserRole.Admin)
+
+                //var roles = (UserRole[])Enum.GetValues(typeof(UserRole));
+                //if (!roles.Contains(dto.Role))
+                //{
+                //    return CustomResponse<UpdateUserResponseDto>.Fail("Invalid role specified.");
+                //}
+
+                if (!Enum.IsDefined(typeof(UserRole), dto.Role))
                 {
-                    _logger.LogInformation($"User with id {id} is already an admin.");
-                    return CustomResponse<UpdateUserResponseDto>.Fail($"User with id {id} is already an admin.");
+                    return CustomResponse<UpdateUserResponseDto>.Fail("Invalid role specified.");
                 }
-                user.Role = DomainModels.Enums.UserRole.Admin;
+
+                var parsedRole = dto.Role;
+                if (user.Role == parsedRole)
+                {
+                    message = $"User with id {id} already has role {parsedRole}.";
+                    _logger.LogInformation(message);
+                    return CustomResponse<UpdateUserResponseDto>.Fail(message);
+                }
+
+                user.Role = parsedRole;
                 await _userRepository.UpdateAsync(user);
-                _logger.LogInformation($"User with id {id} is now an admin.");
-                var userDto = _mapper.Map<UpdateUserResponseDto>(user);
-                return CustomResponse<UpdateUserResponseDto>.Success(userDto, $"User with id {id} is now an admin.");
+
+                message = $"User with id {id} role changed to {parsedRole}.";
+                _logger.LogInformation(message);
+                var responseDto = _mapper.Map<UpdateUserResponseDto>(user);
+
+                return CustomResponse<UpdateUserResponseDto>.Success(responseDto, message);
             }
             catch (UserDataException ex)
             {

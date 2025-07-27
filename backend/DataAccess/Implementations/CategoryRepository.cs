@@ -2,7 +2,7 @@
 using Common.Responses;
 using DataAccess.Interfaces;
 using DomainModels;
-using DTOs;
+using DTOs.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Implementations
@@ -15,7 +15,7 @@ namespace DataAccess.Implementations
             _context = context;
         }
 
-        public async Task<PaginatedResult<Category>> GetCategoriesWithRecipesAsync(PaginationParams paginationParams)
+        public async Task<PaginatedResult<Category>> GetCategoriesWithRecipesAsync(CategoryPaginationParams paginationParams)
         {
             var categories = _context.Categories
                 .Include(c => c.Recipes)

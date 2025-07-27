@@ -1,6 +1,6 @@
 ﻿using Common.Responses;
 using DomainModels;
-using DTOs;
+using DTOs.Pagination;
 
 namespace DataAccess.Interfaces
 {

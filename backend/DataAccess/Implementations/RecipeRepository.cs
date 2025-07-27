@@ -2,7 +2,7 @@
 using Common.Responses;
 using DataAccess.Interfaces;
 using DomainModels;
-using DTOs;
+using DTOs.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Implementations
