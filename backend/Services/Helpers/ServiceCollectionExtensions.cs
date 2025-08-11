@@ -101,6 +101,7 @@ namespace Services.Helpers
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
+                    BearerFormat = "JWT",
                     Scheme = "Bearer"
                 });
 
