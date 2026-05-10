@@ -1,51 +1,66 @@
 <div class="card-container">
-  <div *ngIf="loading" class="loading">Loading recipes...</div>
-  <div *ngIf="error" class="error">{{ error }}</div>
+  @if (loading) {
+    <div class="loading">Loading recipes...</div>
+  }
+  @if (error) {
+    <div class="error">{{ error }}</div>
+  }
 
-  <div *ngIf="!loading && !error && recipes.length" class="card-grid">
-
-    <mat-card *ngFor="let recipe of recipes" class="card">
-      <mat-card-title>{{ recipe.name }}</mat-card-title>
-      <mat-card-content>
-        <p>{{ recipe.description }}</p>
-        <p><strong>Prep:</strong> {{ recipe.prepTime }} | <strong>Cook:</strong> {{ recipe.cookTime }}</p>
-        <p><strong>Servings:</strong> {{ recipe.servings }}</p>
-        <p><strong>Difficulty:</strong> {{ recipe.difficulty }}</p>
-
-        <div *ngIf="recipe.ingredients?.length">
-          <p><strong>Ingredients:</strong></p>
-          <ul>
-            <li *ngFor="let ing of recipe.ingredients; let i = index">
-              <span
-                (click)="toggleIngredient(recipe.id, i)"
-                style="cursor: pointer; color: #3f51b5; font-weight: 500;"
-              >
-                {{ ing.ingredientName }}
-              </span>
-
-              <div
-                [@expandCollapse]="isIngredientExpanded(recipe.id, i) ? 'expanded' : 'collapsed'"
-              >
-                <p>Quantity: {{ ing.quantity }}</p>
-                <p *ngIf="ing.unit">Unit: {{ ing.unit }}</p>
+  @if (!loading && !error && recipes.length) {
+    <div class="card-grid">
+      @for (recipe of recipes; track recipe) {
+        <mat-card class="card">
+          <mat-card-title>{{ recipe.name }}</mat-card-title>
+          <mat-card-content>
+            <p>{{ recipe.description }}</p>
+            <p><strong>Prep:</strong> {{ recipe.prepTime }} | <strong>Cook:</strong> {{ recipe.cookTime }}</p>
+            <p><strong>Servings:</strong> {{ recipe.servings }}</p>
+            <p><strong>Difficulty:</strong> {{ recipe.difficulty }}</p>
+            @if (recipe.ingredients?.length) {
+              <div>
+                <p><strong>Ingredients:</strong></p>
+                <ul>
+                  @for (ing of recipe.ingredients; track ing; let i = $index) {
+                    <li>
+                      <span
+                        (click)="toggleIngredient(recipe.id, i)"
+                        style="cursor: pointer; color: #3f51b5; font-weight: 500;"
+                        >
+                        {{ ing.ingredientName }}
+                      </span>
+                      <div
+                        [@expandCollapse]="isIngredientExpanded(recipe.id, i) ? 'expanded' : 'collapsed'"
+                        >
+                        <p>Quantity: {{ ing.quantity }}</p>
+                        @if (ing.unit) {
+                          <p>Unit: {{ ing.unit }}</p>
+                        }
+                      </div>
+                    </li>
+                  }
+                </ul>
               </div>
-            </li>
-          </ul>
-        </div>
-
-        <div *ngIf="recipe.tags?.length">
-          <p><strong>Tags:</strong></p>
-          <mat-chip-listbox>
-            <mat-chip *ngFor="let tag of recipe.tags" color="primary" selected>
-              {{ tag.tagName }}
-            </mat-chip>
-          </mat-chip-listbox>
-        </div>
-        
-      </mat-card-content>
-    </mat-card>
-  </div>
-  <div *ngIf="!loading && !error && !recipes.length" class="empty">
-    No recipes found.
-  </div>
+            }
+            @if (recipe.tags?.length) {
+              <div>
+                <p><strong>Tags:</strong></p>
+                <mat-chip-listbox>
+                  @for (tag of recipe.tags; track tag) {
+                    <mat-chip color="primary" selected>
+                      {{ tag.tagName }}
+                    </mat-chip>
+                  }
+                </mat-chip-listbox>
+              </div>
+            }
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+  @if (!loading && !error && !recipes.length) {
+    <div class="empty">
+      No recipes found.
+    </div>
+  }
 </div>

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { RecipeService } from '../../../services/recipe.service';
 import { Recipe } from '../../../models/recipe/recipe.interface';
@@ -12,12 +12,11 @@ import { MatChipsModule } from '@angular/material/chips';
   selector: 'app-recipe-list',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatProgressSpinnerModule,
     MatIconModule,
     MatChipsModule
-  ],
+],
   animations: [
     trigger('expandCollapse', [
       state('collapsed', style({

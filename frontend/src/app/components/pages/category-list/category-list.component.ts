@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Category } from '../../../models/category/category.interface';
 import { CategoryService } from '../../../services/category.service';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-category-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.scss'
 })
