@@ -1,3 +1,4 @@
+import { provideZoneChangeDetection } from "@angular/core";
 import { bootstrapApplication } from '@angular/platform-browser';
 //import { LayoutComponent } from './app/components/layout/layout.component';
 import { AppComponent } from './app/app.component';
@@ -14,4 +15,4 @@ import { appConfig } from './app/app.config';
 //   ]
 // });
 
-bootstrapApplication(AppComponent, appConfig);
+bootstrapApplication(AppComponent, {...appConfig, providers: [provideZoneChangeDetection(), ...appConfig.providers]});

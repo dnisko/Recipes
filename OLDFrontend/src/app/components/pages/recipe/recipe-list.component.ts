@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RecipeService } from '../../../services/recipe.service';
 import { Recipe } from '../../../models/recipe/recipe.interface';
 import { MatCardModule } from '@angular/material/card';
@@ -10,11 +10,10 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'app-recipe-list',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatProgressSpinnerModule,
     MatIconModule
-  ],
+],
   templateUrl: './recipe-list.component.html',
   styleUrls: ['./recipe-list.component.scss']
 })

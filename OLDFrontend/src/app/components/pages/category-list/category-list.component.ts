@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Category } from '../../../models/category/category.interface';
 import { CategoryService } from '../../../services/category.service';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,14 +13,12 @@ import { MatListModule } from '@angular/material/list';
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.scss'],
   imports: [
-    CommonModule,
     RouterModule,
     MatProgressSpinnerModule,
     MatButtonModule,
     MatIconModule,
-    //MatSnackBar,
     MatListModule
-  ],
+],
 })
 export class CategoryListComponent implements OnInit {
   categories: Category[] = [];
