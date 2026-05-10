@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RecipeService } from '../../../services/recipe.service';
 import { PaginatedListComponent } from '../../shared/paginated-list/paginated-list.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,14 +15,13 @@ import { MatMenuModule } from '@angular/material/menu';
   selector: 'app-recipe-list',
   standalone: true,
   imports: [
-    CommonModule,
     PaginatedListComponent,
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
     MatMenuModule,
     RouterModule
-  ],
+],
   templateUrl: './recipe-list.component.html',
   styleUrls: ['./recipe-list.component.scss']
 })

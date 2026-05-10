@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { PaginatedListComponent } from '../../shared/paginated-list/paginated-list.component';
 import { CategoryService } from '../../../services/category.service';
 import { Category } from '../../../models/interfaces/category.interface';
@@ -13,13 +13,12 @@ import { RouterModule } from '@angular/router';
   selector: 'app-category-list',
   standalone: true,
   imports: [
-    CommonModule,
     PaginatedListComponent,
     MatProgressSpinnerModule,
     MatButtonModule,
     MatIconModule,
     RouterModule
-  ],
+],
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.scss']
 })

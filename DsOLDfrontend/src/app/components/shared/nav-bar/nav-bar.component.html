@@ -2,11 +2,13 @@
   <div class="navbar-container">
     <a routerLink="/" class="logo">RecipeApp</a>
     <div class="nav-links">
-      <a *ngFor="let item of navItems" 
-         routerLink="{{item.path}}" 
-         routerLinkActive="active">
-        {{item.label}}
-      </a>
+      @for (item of navItems; track item) {
+        <a
+          routerLink="{{item.path}}"
+          routerLinkActive="active">
+          {{item.label}}
+        </a>
+      }
     </div>
   </div>
 </nav>
