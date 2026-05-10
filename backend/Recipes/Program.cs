@@ -19,11 +19,12 @@ namespace Recipes
             var appSettings = appConfig.Get<AppSettings>();
 
             builder.Services.AddControllers();
-                //.AddJsonOptions(options =>
-                //{
-                //    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                //});
-            builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+            //.AddJsonOptions(options =>
+            //{
+            //    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            //});
+            //builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+            builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(AutoMapperProfile).Assembly));
             builder.Services.AddHttpClient();
 
             builder.Host.UseSerilog((context, configuration) =>
